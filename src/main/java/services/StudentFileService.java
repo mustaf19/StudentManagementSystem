@@ -2,7 +2,6 @@ public class StudentFileService{
 
     private static final String filePath = "studentData.json";
 
-
     public boolean saveData(List<Student> studentList){
         boolean result = true;
         try(FileWriter writer = new FileWriter(filePath)){
@@ -11,12 +10,6 @@ public class StudentFileService{
         catch(IOException e){
             result=false;
         }
-        catch(NullPointerException e){
-            result=false;
-        }
         return result;
-
     }
-    
-
 }

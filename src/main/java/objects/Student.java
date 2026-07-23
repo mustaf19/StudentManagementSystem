@@ -80,4 +80,18 @@ public class Student{
     public String toString(){
         return this.name + " " + this.id + "\n";
     }
+
+
+    public String serializeDatatoJson(){
+        return "{"+
+        "\"Id\":\"" + this.id + "\"," +
+         "\"Name\":\"" + this.name + "\"," +
+          "\"PhoneNo\":\"" + this.phoneNo + "\"," +
+           "\"email\":\"" + this.email + "\"," +
+            "\"address\":\"" + this.address + "\"," +
+             "\"bloodGroup\":\"" + this.bloodGroup + "\"," +
+             "\"dob\":\"" + this.dob + "\""
+        +"}";
+
+    }
 }

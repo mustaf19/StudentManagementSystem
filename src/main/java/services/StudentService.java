@@ -3,25 +3,39 @@ package services;
 import java.util.List;
 import java.util.ArrayList;
 import objects.Student;
+import java.util.Collections;
+// import services.StudentFileService; // same package doesnt require importing
 
 public class StudentService{
 
-private List<Student> studentList = new ArrayList<>();
+    private List<Student> studentList;
+    private final StudentFileService sfs;
+
+    private void persistData(){
+        this.sfs.saveData(this.studentList);
+    }
+
+    public StudentService(StudentFileService sfs){
+        this.sfs = sfs;
+        this.studentList = sfs.loadData();
+    }
 
     public boolean addStudent(Student student){
         if(this.searchStudentById(student.getId())==null){
             this.studentList.add(student);
+            this.persistData();
             return true;
         }
         return false;
     }
 
     public List<Student> getStudentsList(){
-        return this.studentList;
+        // return this.studentList;
+        return Collections.unmodifiableList(this.studentList);
     }
 
     public Student searchStudentById(String id){
-        for(Student student: studentList){
+        for(Student student: this.studentList){
             if(student.getId().equals(id)){
                 return student;
             }
@@ -36,6 +50,7 @@ private List<Student> studentList = new ArrayList<>();
             return false;
         }
         this.studentList.remove(studentTobeDeleted);
+        this.persistData();
         return true;
     }
 
@@ -47,8 +62,8 @@ private List<Student> studentList = new ArrayList<>();
         if(paramater.equals("Name")){
             studentToBeUpdated.setName(updatedValue);
         }
+        this.persistData();
         return true;
-
     }
 
 }

@@ -13,11 +13,11 @@ import java.util.ArrayList;
 public class StudentFileService{
 
     private static final String filePath = "studentData.json";
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public boolean saveData(List<Student> studentList){
         boolean result = true;
 
-        ObjectMapper mapper = new ObjectMapper();
         try{
             String json = mapper.writeValueAsString(studentList);
             try(FileWriter writer = new FileWriter(filePath)){
@@ -47,6 +47,9 @@ public class StudentFileService{
                 ch = reader.read();
             }
             json = strBuild.toString();
+            if(json.isBlank()){
+                return new ArrayList<>();
+            }
         }
         catch(Exception e){
             e.printStackTrace();
@@ -61,13 +64,13 @@ public class StudentFileService{
                 }
             }
         }
-        ObjectMapper mapper = new ObjectMapper();
+        
         List<Student> retStudent = new ArrayList<>();
         try{
             retStudent = mapper.readValue(json,new TypeReference<List<Student>>() {});
         }
         catch(JsonProcessingException e){e.printStackTrace();}
-        catch(IOException e){e.printStackTrace();}
+        // catch(IOException e){e.printStackTrace();}
         return retStudent;
 
     }

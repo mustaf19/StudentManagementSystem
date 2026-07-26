@@ -2,15 +2,14 @@ import java.util.List;
 import services.StudentService;
 import services.StudentFileService;
 import objects.Student;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
+// import com.fasterxml.jackson.databind.ObjectMapper;
+// import com.fasterxml.jackson.core.JsonProcessingException;
 
 
 class Main{
     public static void main(String[] args){
         System.out.println("Hello World, application started");
-
-        StudentService studentService = new StudentService();
+        StudentService studentService = new StudentService(new StudentFileService());
 
         studentService.addStudent(new Student("1", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
         studentService.addStudent(new Student("2", "Jane Smith", "jane.smith@example.com", "456 Elm St, Othertown, USA", "0987654321", "B-", "1991-02-02"));
@@ -18,9 +17,6 @@ class Main{
 
 
         List<Student> students = studentService.getStudentsList();
-
-        StudentFileService sfs = new StudentFileService();
-        sfs.saveData(students);
 
         for(Student student : students){
             System.out.println(student.toString());

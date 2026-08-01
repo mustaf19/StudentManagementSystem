@@ -86,6 +86,8 @@ class Main{
         // }
 
         studentService.updateStudent("3", "Name", "Jimmy");
+
+        scanner.close();
     
     }
 }

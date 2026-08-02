@@ -10,6 +10,8 @@ public class Student{
     private String bloodGroup;
     private String dob;
 
+    public Student(){}
+    
     public Student(String id, String name, String email, String address, String phoneNo, String bloodGroup, String dob){
         this.id = id;
         this.name = name;

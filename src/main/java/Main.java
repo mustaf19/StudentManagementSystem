@@ -28,12 +28,25 @@ class Main{
 
     private static void updateStudent(Scanner scanner, StudentService service){
 
+        System.out.println("Enter id of student to be updated");
+        String id = scanner.nextLine();
+        Student student = service.searchStudentById(id);
+        if(student == null){
+            System.out.println("Student not found");
+        }
+        else{
+            System.out.println("Current name: " + student.getName());
+            System.out.println("Enter name to be changed");
+            String name = scanner.nextLine();
+            service.updateStudent(id, "Name", name);
+            System.out.println(student);
+        }
     }
 
     private static void showStudents(StudentService service){
         List<Student> students = service.getStudentsList();
         for(Student student: students){
-            System.out.println(student.toString());
+            System.out.println(student);
         }
     }
 
@@ -41,9 +54,9 @@ class Main{
         Scanner scanner = new Scanner(System.in);
         StudentService studentService = new StudentService(new StudentFileService());
 
-        studentService.addStudent(new Student("1", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
-        studentService.addStudent(new Student("2", "Jane Smith", "jane.smith@example.com", "456 Elm St, Othertown, USA", "0987654321", "B-", "1991-02-02"));
-        studentService.addStudent(new Student("3", "Jim Beam", "jim.beam@example.com", "789 Oak St, Anothertown, USA", "3456789012", "C+", "1992-03-03"));
+        // studentService.addStudent(new Student("1", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        // studentService.addStudent(new Student("2", "Jane Smith", "jane.smith@example.com", "456 Elm St, Othertown, USA", "0987654321", "B-", "1991-02-02"));
+        // studentService.addStudent(new Student("3", "Jim Beam", "jim.beam@example.com", "789 Oak St, Anothertown, USA", "3456789012", "C+", "1992-03-03"));
 
 
         while(true){
@@ -74,18 +87,18 @@ class Main{
         //     System.out.println(student.toString());
         // }
 
-        boolean isDeleted = studentService.deleteStudent("2");
-        if(isDeleted){
-            System.out.println("Student 2 deleted successfully");
-        }else{
-            System.out.println("Student 2 not found");
-        }
+        // boolean isDeleted = studentService.deleteStudent("2");
+        // if(isDeleted){
+        //     System.out.println("Student 2 deleted successfully");
+        // }else{
+        //     System.out.println("Student 2 not found");
+        // }
 
         // for(Student student : students){
         //     System.out.println(student.toString());
         // }
 
-        studentService.updateStudent("3", "Name", "Jimmy");
+        // studentService.updateStudent("3", "Name", "Jimmy");
 
         scanner.close();
     

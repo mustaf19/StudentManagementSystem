@@ -28,6 +28,39 @@ class Main{
 
     private static void updateStudent(Scanner scanner, StudentService service){
 
+        System.out.println("Enter id of student to be updated");
+        String id = scanner.nextLine();
+        
+        while(true){
+            System.out.println("What is to be edited?");
+            System.out.println("1.Name\n2.Email\n3.Address\n4.Phone no\n5.Blood Group\n6.dob\n");
+            int choosenOption = scanner.nextInt();
+            scanner.nextLine();
+            switch(choosenOption){
+                case 1: service.updateStudentForName(id, scanner); break;
+                case 2: service.updateStudentForEmail(id, scanner); break;
+                case 3: service.updateStudentForAddress(id, scanner); break;
+                case 4: service.updateStudentForPhoneNo(id, scanner); break;
+                case 5: service.updateStudentForBloodGroup(id, scanner); break;
+                case 6: service.updateStudentForDob(id, scanner); break;
+                default: break;
+            }
+            if(chooseOption<1 && choosenOption>6){
+                break;
+            }
+        }
+        
+        Student student = service.searchStudentById(id);
+        if(student == null){
+            System.out.println("Student not found");
+        }
+        else{
+            System.out.println("Current name: " + student.getName());
+            System.out.println("Enter name to be changed");
+            String name = scanner.nextLine();
+            service.updateStudent(id, "Name", name);
+            System.out.println(student);
+        }
     }
 
     private static void showStudents(StudentService service){
@@ -35,6 +68,24 @@ class Main{
         for(Student student: students){
             System.out.println(student.toString());
         }
+    }
+
+    private static void searchStudent(Scanner scanner, StudentService service){
+        System.out.println("Enter id of the student");
+        String id = scanner.nextLine();
+        Studnet searchedStudent = service.searchStudentById(id);
+        if(searchedStudent!=null)
+            System.out.println(searchedStudent.toString());
+        else System.out.println("No student found with this id");
+    }
+
+    private static void searchStudent(Scanner scanner, StudentService service){
+        System.out.println("Enter id of the student");
+        String id = scanner.nextLine();
+        Studnet searchedStudent = service.searchStudentById(id);
+        if(searchedStudent!=null)
+            System.out.println(searchedStudent.toString());
+        else System.out.println("No student found with this id");
     }
 
     public static void main(String[] args){

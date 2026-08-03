@@ -30,26 +30,6 @@ class Main{
 
         System.out.println("Enter id of student to be updated");
         String id = scanner.nextLine();
-        
-        while(true){
-            System.out.println("What is to be edited?");
-            System.out.println("1.Name\n2.Email\n3.Address\n4.Phone no\n5.Blood Group\n6.dob\n");
-            int choosenOption = scanner.nextInt();
-            scanner.nextLine();
-            switch(choosenOption){
-                case 1: service.updateStudentForName(id, scanner); break;
-                case 2: service.updateStudentForEmail(id, scanner); break;
-                case 3: service.updateStudentForAddress(id, scanner); break;
-                case 4: service.updateStudentForPhoneNo(id, scanner); break;
-                case 5: service.updateStudentForBloodGroup(id, scanner); break;
-                case 6: service.updateStudentForDob(id, scanner); break;
-                default: break;
-            }
-            if(chooseOption<1 && choosenOption>6){
-                break;
-            }
-        }
-        
         Student student = service.searchStudentById(id);
         if(student == null){
             System.out.println("Student not found");
@@ -66,7 +46,7 @@ class Main{
     private static void showStudents(StudentService service){
         List<Student> students = service.getStudentsList();
         for(Student student: students){
-            System.out.println(student.toString());
+            System.out.println(student);
         }
     }
 
@@ -92,9 +72,9 @@ class Main{
         Scanner scanner = new Scanner(System.in);
         StudentService studentService = new StudentService(new StudentFileService());
 
-        studentService.addStudent(new Student("1", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
-        studentService.addStudent(new Student("2", "Jane Smith", "jane.smith@example.com", "456 Elm St, Othertown, USA", "0987654321", "B-", "1991-02-02"));
-        studentService.addStudent(new Student("3", "Jim Beam", "jim.beam@example.com", "789 Oak St, Anothertown, USA", "3456789012", "C+", "1992-03-03"));
+        // studentService.addStudent(new Student("1", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        // studentService.addStudent(new Student("2", "Jane Smith", "jane.smith@example.com", "456 Elm St, Othertown, USA", "0987654321", "B-", "1991-02-02"));
+        // studentService.addStudent(new Student("3", "Jim Beam", "jim.beam@example.com", "789 Oak St, Anothertown, USA", "3456789012", "C+", "1992-03-03"));
 
 
         while(true){
@@ -125,18 +105,18 @@ class Main{
         //     System.out.println(student.toString());
         // }
 
-        boolean isDeleted = studentService.deleteStudent("2");
-        if(isDeleted){
-            System.out.println("Student 2 deleted successfully");
-        }else{
-            System.out.println("Student 2 not found");
-        }
+        // boolean isDeleted = studentService.deleteStudent("2");
+        // if(isDeleted){
+        //     System.out.println("Student 2 deleted successfully");
+        // }else{
+        //     System.out.println("Student 2 not found");
+        // }
 
         // for(Student student : students){
         //     System.out.println(student.toString());
         // }
 
-        studentService.updateStudent("3", "Name", "Jimmy");
+        // studentService.updateStudent("3", "Name", "Jimmy");
 
         scanner.close();
     

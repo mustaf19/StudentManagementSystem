@@ -18,7 +18,9 @@ class Main{
         String name = scanner.nextLine();
         // Random random = new Random();
         String uuid = UUID.randomUUID().toString();
-        service.addStudent(new Student(uuid,name,"jim.beam@example.com", "789 Oak St, Anothertown, USA", "3456789012", "C+", "1992-03-03" ));
+        String email = scanner.nextLine();
+        String number = scanner.nextLine();
+        service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", "1992-03-03" ));
     }
 
     private static void deleteStudent(Scanner scanner, StudentService service){

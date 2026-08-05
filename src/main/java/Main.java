@@ -15,10 +15,15 @@ class Main{
     }
 
     private static void addStudent(Scanner scanner, StudentService service){
+        System.out.print("Enter name: ");
         String name = scanner.nextLine();
         // Random random = new Random();
         String uuid = UUID.randomUUID().toString();
+
+        System.out.print("Enter email: ");
         String email = scanner.nextLine();
+
+        System.out.print("Enter phone: ");
         String number = scanner.nextLine();
         service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", "1992-03-03" ));
     }
@@ -47,6 +52,10 @@ class Main{
 
     private static void showStudents(StudentService service){
         List<Student> students = service.getStudentsList();
+        if(students.isEmpty()){
+            System.out.println("No records found!");
+            return;
+        }
         for(Student student: students){
             System.out.println(student);
         }

@@ -26,21 +26,21 @@ public class StudentService{
         }
     }
 
-    public boolean checkEmail(Student student){
+    public boolean checkEmail(String email){
 
-        if(student.getEmail()!= null && student.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") == false){
+        if(email!= null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") == false){
             System.out.println("Something in Wmail is wrong");
-             System.out.println(student.getEmail());
+             System.out.println(email);
              return false;
         }
         return true;
 
     }
 
-    public boolean checkPhone(Student student){
-        if(student.getPhoneNo()!= null && student.getPhoneNo().matches("\\d{10}$") == false){
+    public boolean checkPhone(String phoneNo){
+        if(phoneNo!= null && phoneNo.matches("\\d{10}$") == false){
             System.out.println("Something in PhoneNo is wrong");
-            System.out.println(student.getPhoneNo());
+            System.out.println(phoneNo);
             return false;
         }
         return true;
@@ -48,8 +48,8 @@ public class StudentService{
 
     }
 
-    public boolean isUniqueId(Student student){
-        if(studentIds.contains(student.getId())){
+    public boolean isUniqueId(String id){
+        if(studentIds.contains(id)){
             System.out.println("Id already exists");
             return false;
         }
@@ -57,9 +57,9 @@ public class StudentService{
     }
 
     public boolean addStudent(Student student){
-        if(this.checkEmail(student)==false) return false;
-        if(this.checkPhone(student)==false) return false;
-        if(this.isUniqueId(student)==false) return false;
+        if(this.checkEmail(student.getEmail())==false) return false;
+        if(this.checkPhone(student.getPhoneNo())==false) return false;
+        if(this.isUniqueId(student.getId())==false) return false;
         if(this.searchStudentById(student.getId())==null){
             this.studentList.add(student);
             this.persistData();
@@ -89,6 +89,7 @@ public class StudentService{
             return false;
         }
         this.studentList.remove(studentTobeDeleted);
+        this.studentIds.remove(studentTobeDeleted.getId());
         this.persistData();
         return true;
     }
@@ -98,8 +99,16 @@ public class StudentService{
         if(studentToBeUpdated==null){
             return false;
         }
-        if(paramater.equals("Name")){
-            studentToBeUpdated.setName(updatedValue);
+        // if(paramater.equals("Name")){
+        //     studentToBeUpdated.setName(updatedValue);
+        // }
+        switch(paramater){
+            case "NAME": studentToBeUpdated.setName(updatedValue); break;
+            case "ADDRESS": studentToBeUpdated.setName(updatedValue); break;
+            case "PHONENO": studentToBeUpdated.setName(updatedValue); break;
+            case "EMAIL": studentToBeUpdated.setName(updatedValue); break;
+            case "DOB": studentToBeUpdated.setName(updatedValue); break;
+            case default: break;
         }
         this.persistData();
         return true;

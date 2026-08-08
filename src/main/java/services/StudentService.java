@@ -108,7 +108,7 @@ public class StudentService{
             case "PHONENO": studentToBeUpdated.setName(updatedValue); break;
             case "EMAIL": studentToBeUpdated.setName(updatedValue); break;
             case "DOB": studentToBeUpdated.setName(updatedValue); break;
-            case default: break;
+            default: break;
         }
         this.persistData();
         return true;

@@ -10,11 +10,12 @@ import java.io.FileReader;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
 
-public class StudentFileService{
+public class StudentFileService implements StudentRepository{
 
     private static final String filePath = "studentData.json";
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    @Override
     public boolean saveData(List<Student> studentList){
         boolean result = true;
 
@@ -32,7 +33,7 @@ public class StudentFileService{
         return result;
     }
 
-
+    @Override
     public List<Student> loadData(){
 
         FileReader reader = null;
@@ -72,6 +73,5 @@ public class StudentFileService{
         catch(JsonProcessingException e){e.printStackTrace();}
         // catch(IOException e){e.printStackTrace();}
         return retStudent;
-
     }
 }

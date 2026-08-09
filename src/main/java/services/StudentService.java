@@ -6,21 +6,21 @@ import java.util.Set;
 import java.util.HashSet;
 import objects.Student;
 import java.util.Collections;
-// import services.StudentFileService; // same package doesnt require importing
+// import services.StudentRepository; // same package doesnt require importing
 
 public class StudentService{
 
     private List<Student> studentList;
-    private final StudentFileService sfs;
+    private final StudentRepository sri;
     private Set<String> studentIds = new HashSet<String>();
 
     private void persistData(){
-        this.sfs.saveData(this.studentList);
+        this.sri.saveData(this.studentList);
     }
 
-    public StudentService(StudentFileService sfs){
-        this.sfs = sfs;
-        this.studentList = sfs.loadData();
+    public StudentService(StudentRepository sri){
+        this.sri = sri;
+        this.studentList = sri.loadData();
         for(Student student: studentList){
             studentIds.add(student.getId());
         }

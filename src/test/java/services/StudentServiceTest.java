@@ -47,7 +47,44 @@ class StudentServiceTest {
         Student st = sf.searchStudentById("1000");
 
         // Assert
-        assertNotNull(st);
+        assertEquals("1000", st.getId());
 
+    }
+
+    @Test
+    void shouldReturnNullWhenStudentDoesNotExist(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+
+        Student st = sf.searchStudentById("10000");
+
+        assertNull(st);
+    }
+
+    @Test
+    void deletedStudentShouldNotBePresent(){
+        // Arrange
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+        sf.addStudent(new Student("1005", "Juhnny Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+
+
+        // Act
+        boolean result = sf.deleteStudent("1005");
+        Student st = sf.searchStudentById("1005");
+
+
+        // Assert
+        assertTrue(result);
+        assertNull(st);
+        
+    }
+
+
+    @Test
+    void deletingNonExistingStudent(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+
+        boolean result = sf.deleteStudent("10000");
+
+        assertFalse(result);
     }
 }

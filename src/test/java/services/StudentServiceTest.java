@@ -34,4 +34,20 @@ class StudentServiceTest {
         assertTrue(result);
 
     }
+
+
+     @Test
+    void shouldFindExistingStudentById() {
+
+        // Arrange
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+        // Act
+        boolean result = sf.addStudent(new Student("1000", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+
+        Student st = sf.searchStudentById("1000");
+
+        // Assert
+        assertNotNull(st);
+
+    }
 }

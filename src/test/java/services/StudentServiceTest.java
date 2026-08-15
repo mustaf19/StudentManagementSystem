@@ -92,12 +92,44 @@ class StudentServiceTest {
     @Test
     void updateExistingStudent(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
-        sf.addStudent(new Student("1006", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        sf.addStudent(new Student("1006", "JOhn A", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
 
-        boolean rs = sf.updateStudent("1006", "NAME", "John");
+        boolean rs = sf.updateStudent("1006", "NAME", "John Updated");
 
         assertTrue(rs);
-        assertEquals("John", sf.searchStudentById("1006").getName());
+        assertEquals("John Updated", sf.searchStudentById("1006").getName());
+    }
+
+    @Test
+    void updateExistingStudentWithWrongFormatEmail(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+        sf.addStudent(new Student("2001", "JOhn B", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+
+        boolean rs = sf.updateStudent("2001", "EMAIL", "john.engexample.com");
+
+        assertFalse(rs);
+        assertEquals("john.eng@example.com", sf.searchStudentById("2001").getEmail());
+    }
+
+    @Test
+    void updateExistingStudentWithWrongFormatPhoneNo(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+        sf.addStudent(new Student("2002", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+
+        boolean rs = sf.updateStudent("2002", "PHONENO", "123456");
+
+        assertFalse(rs);
+        assertEquals("1234567890", sf.searchStudentById("2002").getPhoneNo());
+    }
+
+    @Test
+    void updatingNonExistingParameter(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+        sf.addStudent(new Student("2002", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+
+        boolean rs = sf.updateStudent("2002", "sdsdv", "csdvsr");
+
+        assertFalse(rs);
     }
 
     
@@ -164,4 +196,6 @@ class StudentServiceTest {
 
         assertFalse(rs);
     }
+
+    
 }

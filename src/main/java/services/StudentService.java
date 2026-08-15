@@ -96,7 +96,7 @@ public class StudentService{
 
     public boolean updateStudent(String id, String paramater, String updatedValue){
         Student studentToBeUpdated = this.searchStudentById(id);
-        if(studentToBeUpdated==null){
+        if(studentToBeUpdated==null || updatedValue==null || paramater ==null){
             return false;
         }
         // if(paramater.equals("Name")){
@@ -104,11 +104,18 @@ public class StudentService{
         // }
         switch(paramater){
             case "NAME": studentToBeUpdated.setName(updatedValue); break;
-            case "ADDRESS": studentToBeUpdated.setAddress(updatedValue); break;
-            case "PHONENO": studentToBeUpdated.setPhoneNo(updatedValue); break;
-            case "EMAIL": studentToBeUpdated.setEmail(updatedValue); break;
+            case "ADDRESS": 
+                studentToBeUpdated.setAddress(updatedValue); break;
+            case "PHONENO": 
+                if(this.checkPhone(updatedValue)==false) return false;
+                studentToBeUpdated.setPhoneNo(updatedValue);
+                break;
+            case "EMAIL": 
+                if(this.checkEmail(updatedValue)==false) return false;
+                studentToBeUpdated.setEmail(updatedValue); 
+                break;
             case "DOB": studentToBeUpdated.setDob(updatedValue); break;
-            default: break;
+            default: return false;
         }
         this.persistData();
         return true;

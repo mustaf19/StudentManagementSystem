@@ -34,7 +34,6 @@ public class StudentService{
              return false;
         }
         return true;
-
     }
 
     public boolean checkPhone(String phoneNo){
@@ -62,6 +61,7 @@ public class StudentService{
         if(this.isUniqueId(student.getId())==false) return false;
         if(this.searchStudentById(student.getId())==null){
             this.studentList.add(student);
+            this.studentIds.add(student.getId());
             this.persistData();
             return true;
         }
@@ -104,10 +104,10 @@ public class StudentService{
         // }
         switch(paramater){
             case "NAME": studentToBeUpdated.setName(updatedValue); break;
-            case "ADDRESS": studentToBeUpdated.setName(updatedValue); break;
-            case "PHONENO": studentToBeUpdated.setName(updatedValue); break;
-            case "EMAIL": studentToBeUpdated.setName(updatedValue); break;
-            case "DOB": studentToBeUpdated.setName(updatedValue); break;
+            case "ADDRESS": studentToBeUpdated.setAddress(updatedValue); break;
+            case "PHONENO": studentToBeUpdated.setPhoneNo(updatedValue); break;
+            case "EMAIL": studentToBeUpdated.setEmail(updatedValue); break;
+            case "DOB": studentToBeUpdated.setDob(updatedValue); break;
             default: break;
         }
         this.persistData();

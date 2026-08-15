@@ -87,4 +87,81 @@ class StudentServiceTest {
 
         assertFalse(result);
     }
+
+
+    @Test
+    void updateExistingStudent(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+        sf.addStudent(new Student("1006", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+
+        boolean rs = sf.updateStudent("1006", "NAME", "John");
+
+        assertTrue(rs);
+        assertEquals("John", sf.searchStudentById("1006").getName());
+    }
+
+    
+    @Test
+    void updateNonExistingStudent(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+
+        boolean rs = sf.updateStudent("1007", "NAME", "John");
+
+        assertFalse(rs);
+    }
+
+
+    @Test
+    void checkCorrectEmail(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+
+        boolean result = sf.checkEmail("john.doe@gmail.com");
+
+        assertTrue(result);
+    }
+
+    @Test
+    void checkInCorrectEmail(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+
+        boolean result = sf.checkEmail("john.doegmail.com");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void checkCorrectPhoneNo(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+
+        boolean result = sf.checkPhone("9876543210");
+
+        assertTrue(result);
+    }
+
+    @Test
+    void checkInCorrectPhoneNo(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+
+        boolean result = sf.checkPhone("9876");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void addingWithInvalidPhone(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+
+        boolean rs = sf.addStudent(new Student("1007", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "12345", "A+", "1990-01-01"));
+
+        assertFalse(rs);
+    }
+
+    @Test
+    void addingWithInvalidEmail(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+
+        boolean rs = sf.addStudent(new Student("1008", "JOhn Eng", "john.engexample.com", "123 Main St, Anytown, USA", "9087654321", "A+", "1990-01-01"));
+
+        assertFalse(rs);
+    }
 }

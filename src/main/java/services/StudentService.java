@@ -114,4 +114,40 @@ public class StudentService{
         return true;
     }
 
+    public void updateStudentForName(String id, Scanner scanner){
+        Student studentToBeUpdated = this.searchStudentById(id);
+        String newName = scanner.nextLine();
+        studentToBeUpdated.setName(newName);
+    }
+
+    public void updateStudentForEmail(String id, Scanner scanner){
+        Student studentToBeUpdated = this.searchStudentById(id);
+        String newEmail = scanner.nextLine();
+        studentToBeUpdated.setEmail(newEmail);
+    }
+
+        public void updateStudentForAddress(String id, Scanner scanner){
+        Student studentToBeUpdated = this.searchStudentById(id);
+        String newAddress = scanner.nextLine();
+        studentToBeUpdated.setName(newAddress);
+    }
+
+        public void updateStudentForPhoneNo(String id, Scanner scanner){
+        Student studentToBeUpdated = this.searchStudentById(id);
+        String newPhoneno = scanner.nextLine();
+        studentToBeUpdated.setPhoneNo(newPhoneno);
+    }
+
+        public void updateStudentForBloodGroup(String id, Scanner scanner){
+        Student studentToBeUpdated = this.searchStudentById(id);
+        String bloodGroup = scanner.nextLine();
+        studentToBeUpdated.setBloodGroup(bloodGroup);
+    }
+
+        public void updateStudentForDob(String id, Scanner scanner){
+        Student studentToBeUpdated = this.searchStudentById(id);
+        String newDob = scanner.nextLine();
+        studentToBeUpdated.setDob(newDob);
+    }
+
 }

@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.HashSet;
 import objects.Student;
 import java.util.Collections;
+import java.util.Scanner;
 // import services.StudentRepository; // same package doesnt require importing
 
 public class StudentService{
@@ -14,8 +15,8 @@ public class StudentService{
     private final StudentRepository sri;
     private Set<String> studentIds = new HashSet<String>();
 
-    private void persistData(){
-        this.sri.saveData(this.studentList);
+    private boolean persistData(){
+        return this.sri.saveData(this.studentList);
     }
 
     public StudentService(StudentRepository sri){
@@ -62,8 +63,7 @@ public class StudentService{
         if(this.searchStudentById(student.getId())==null){
             this.studentList.add(student);
             this.studentIds.add(student.getId());
-            this.persistData();
-            return true;
+            return this.persistData();
         }
         return false;
     }

@@ -197,5 +197,13 @@ class StudentServiceTest {
         assertFalse(rs);
     }
 
-    
+    @Test
+    void addingToFailingSaveData(){
+        StudentService sf = new StudentService(new FailingRepository());
+
+        boolean rs = sf.addStudent(new Student("1009", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "9087654321", "A+", "1990-01-01"));
+
+        assertFalse(rs);
+    }
+
 }

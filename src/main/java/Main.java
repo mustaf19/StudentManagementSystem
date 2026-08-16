@@ -61,19 +61,19 @@ class Main{
         }
     }
 
-    private static void searchStudent(Scanner scanner, StudentService service){
-        System.out.println("Enter id of the student");
-        String id = scanner.nextLine();
-        Studnet searchedStudent = service.searchStudentById(id);
-        if(searchedStudent!=null)
-            System.out.println(searchedStudent.toString());
-        else System.out.println("No student found with this id");
-    }
+    // private static void searchStudent(Scanner scanner, StudentService service){
+    //     System.out.println("Enter id of the student");
+    //     String id = scanner.nextLine();
+    //     Studnet searchedStudent = service.searchStudentById(id);
+    //     if(searchedStudent!=null)
+    //         System.out.println(searchedStudent.toString());
+    //     else System.out.println("No student found with this id");
+    // }
 
     private static void searchStudent(Scanner scanner, StudentService service){
         System.out.println("Enter id of the student");
         String id = scanner.nextLine();
-        Studnet searchedStudent = service.searchStudentById(id);
+        Student searchedStudent = service.searchStudentById(id);
         if(searchedStudent!=null)
             System.out.println(searchedStudent.toString());
         else System.out.println("No student found with this id");

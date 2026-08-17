@@ -3,6 +3,8 @@ package services;
 import org.junit.jupiter.api.Test;
 import objects.Student;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import static org.mockito.Mockito.*;
 
 class StudentServiceTest {
 
@@ -206,4 +208,24 @@ class StudentServiceTest {
         assertFalse(rs);
     }
 
+    @Test
+    void shouldPersistWhenStudentIsAdded() {
+
+        // Arrange
+        StudentRepository repository = mock(StudentRepository.class);
+
+        when(repository.loadData()).thenReturn(new ArrayList<>());
+
+        StudentService sf = new StudentService(repository);
+
+        // Act
+        sf.addStudent(new Student("1010", "Summer Von", "sum.von@example.com", "123 Main St, Anytown, USA", "9087654321", "A+", "1990-01-01"));
+
+
+        // sf.addStudent(student);
+
+        // Verify
+        verify(repository).saveData(any());
+
+    }
 }

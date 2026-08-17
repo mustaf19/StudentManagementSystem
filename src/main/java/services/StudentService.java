@@ -45,7 +45,6 @@ public class StudentService{
         }
         return true;
         // return student.getPhoneNo()!= null && student.getPhoneNo().matches("\\d{10}");
-
     }
 
     public boolean isUniqueId(String id){
@@ -90,8 +89,7 @@ public class StudentService{
         }
         this.studentList.remove(studentTobeDeleted);
         this.studentIds.remove(studentTobeDeleted.getId());
-        this.persistData();
-        return true;
+        return this.persistData();
     }
 
     public boolean updateStudent(String id, String paramater, String updatedValue){
@@ -117,8 +115,7 @@ public class StudentService{
             case "DOB": studentToBeUpdated.setDob(updatedValue); break;
             default: return false;
         }
-        this.persistData();
-        return true;
+        return this.persistData();
     }
 
     public void updateStudentForName(String id, Scanner scanner){

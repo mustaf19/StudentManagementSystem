@@ -4,7 +4,7 @@ import java.util.*;
 import objects.Student;
 
 
-public interface StudentRepository {
+public interface StudentRepositoryNew {
 
     void save(Student student);
 

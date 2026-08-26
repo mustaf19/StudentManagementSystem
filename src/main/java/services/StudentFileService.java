@@ -15,28 +15,7 @@ public class StudentFileService implements StudentRepository{
     private static final String filePath = "studentData.json";
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    @Override
-    public boolean save(Student student){
-
-        boolean result = true;
-
-        try{
-            String json = mapper.writeValueAsString(studentList);
-            try(FileWriter writer = new FileWriter(filePath)){
-                System.out.println(json);
-                writer.write(json);
-            }
-            catch(IOException e){ e.printStackTrace(); result = false;}
-        }
-        catch(JsonProcessingException e){
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    @Override
-    public Student findById(String id){
-
+    private List<Student> readStudentsFromFile(){
         FileReader reader = null;
         StringBuilder strBuild = new StringBuilder();
         String json = "";
@@ -73,7 +52,34 @@ public class StudentFileService implements StudentRepository{
         }
         catch(JsonProcessingException e){e.printStackTrace();}
         // catch(IOException e){e.printStackTrace();}
-        forEach(Student x: retStudent){
+        return retStudent;
+
+    }
+
+    @Override
+    public void save(Student student){
+
+        List<Student> studentList = readStudentsFromFile();
+
+        try{
+            String json = mapper.writeValueAsString(studentList);
+            try(FileWriter writer = new FileWriter(filePath)){
+                System.out.println(json);
+                writer.write(json);
+            }
+            catch(IOException e){ e.printStackTrace();}
+        }
+        catch(JsonProcessingException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Student findById(String id){
+        
+        List<Student> retStudent = readStudentsFromFile();
+
+        for(Student x: retStudent){
             if(x.getId().equals(id)){
                 return x;
             }
@@ -83,13 +89,56 @@ public class StudentFileService implements StudentRepository{
     }
 
     @Override
-    public void deleteById(String id);
+    public void deleteById(String id){
+        List<Student> retStudent = readStudentsFromFile();
+
+        for(Student x: retStudent){
+            if(x.getId().equals(id)){
+                retStudent.remove(x); break;
+            }
+        }
+
+        try{    
+            String json = mapper.writeValueAsString(retStudent);
+            try(FileWriter writer = new FileWriter(filePath)){
+                System.out.println(json);
+                writer.write(json);
+            }
+            catch(IOException e){ e.printStackTrace();}
+        }
+        catch(JsonProcessingException e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
-    public void update(Student student);
+    public void update(Student student){
+        List<Student> retStudent = readStudentsFromFile();
+
+        for(Student x: retStudent){
+            if(x.getId().equals(student.getId())){
+                retStudent.remove(x);
+                retStudent.add(student);
+            }
+        }
+
+        try{    
+            String json = mapper.writeValueAsString(retStudent);
+            try(FileWriter writer = new FileWriter(filePath)){
+                System.out.println(json);
+                writer.write(json);
+            }
+            catch(IOException e){ e.printStackTrace();}
+        }
+        catch(JsonProcessingException e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
-    public List<Student> findAll();
+    public List<Student> findAll(){
+        return readStudentsFromFile();
+    }
 }
 
 // public class StudentFileService implements StudentRepository{

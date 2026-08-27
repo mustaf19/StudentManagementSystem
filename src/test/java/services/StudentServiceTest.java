@@ -214,7 +214,7 @@ class StudentServiceTest {
         // Arrange
         StudentRepository repository = mock(StudentRepository.class);
 
-        when(repository.loadData()).thenReturn(new ArrayList<>());
+        when(repository.findAll()).thenReturn(new ArrayList<>());
 
         StudentService sf = new StudentService(repository);
 
@@ -225,7 +225,7 @@ class StudentServiceTest {
         // sf.addStudent(student);
 
         // Verify
-        verify(repository).saveData(any());
+        verify(repository).save(any());
 
     }
 }

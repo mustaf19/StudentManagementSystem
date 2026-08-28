@@ -22,11 +22,14 @@ public class InMemoryStudentRepository implements StudentRepository {
     }
 
     public void deleteById(String id){
+        Student y=null;
         for(Student x: students){
             if(x.getId().equals(id)){
-                students.remove(x);
+                // students.remove(x);
+                y=x;
             }
         }
+        students.remove(y);
     }
 
     public void update(Student student){

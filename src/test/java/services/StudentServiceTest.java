@@ -66,7 +66,7 @@ class StudentServiceTest {
     void deletedStudentShouldNotBePresent(){
         // Arrange
         StudentService sf = new StudentService(new InMemoryStudentRepository());
-        sf.addStudent(new Student("1005", "Juhnny Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        boolean addResult = sf.addStudent(new Student("1005", "Juhnny Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
 
 
         // Act
@@ -75,6 +75,7 @@ class StudentServiceTest {
 
 
         // Assert
+        assertTrue(addResult);
         assertTrue(result);
         assertNull(st);
         

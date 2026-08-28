@@ -76,6 +76,7 @@ public class StudentService{
 
     public boolean deleteStudent(String id){
         Student studentTobeDeleted = this.searchStudentById(id);
+
         if(studentTobeDeleted == null){
             return false;
         }
@@ -83,6 +84,7 @@ public class StudentService{
             this.sri.deleteById(id);
         }
         catch(Exception e){
+            System.out.println("Exception occured");
             return false;
         }
         return true;

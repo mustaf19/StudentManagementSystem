@@ -76,8 +76,7 @@ public class StudentService{
 
     public boolean deleteStudent(String id){
         Student studentTobeDeleted = this.searchStudentById(id);
-        System.out.println(";;;");
-        System.out.println(studentTobeDeleted);
+
         if(studentTobeDeleted == null){
             return false;
         }

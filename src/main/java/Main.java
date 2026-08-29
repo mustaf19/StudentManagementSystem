@@ -8,7 +8,7 @@ import java.util.UUID;
 // import com.fasterxml.jackson.core.JsonProcessingException;
 
 
-class Main{
+public class Main{
     private static void showMenu(){
         System.out.println("1. add\n2. delete\n3.update\n4.get Students\n and above exit");
 

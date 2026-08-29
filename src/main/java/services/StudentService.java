@@ -11,13 +11,11 @@ import java.util.Scanner;
 
 public class StudentService{
 
-    private List<Student> studentList;
     private final StudentRepository sri;
     private Set<String> studentIds = new HashSet<String>();
 
     public StudentService(StudentRepository sri){
         this.sri = sri;
-        this.studentList = sri.findAll();
     }
 
     public boolean checkEmail(String email){
@@ -65,8 +63,7 @@ public class StudentService{
     }
 
     public List<Student> getStudentsList(){
-        // return this.studentList;
-        return Collections.unmodifiableList(this.studentList);
+        return Collections.unmodifiableList(this.sri.findAll());
     }
 
     public Student searchStudentById(String id){
@@ -93,6 +90,7 @@ public class StudentService{
     public boolean updateStudent(String id, String paramater, String updatedValue){
         Student studentToBeUpdated = this.searchStudentById(id);
         if(studentToBeUpdated==null || updatedValue==null || paramater ==null){
+            System.out.println("Can't find the student");
             return false;
         }
         // if(paramater.equals("Name")){
@@ -129,25 +127,25 @@ public class StudentService{
         studentToBeUpdated.setEmail(newEmail);
     }
 
-        public void updateStudentForAddress(String id, Scanner scanner){
+    public void updateStudentForAddress(String id, Scanner scanner){
         Student studentToBeUpdated = this.searchStudentById(id);
         String newAddress = scanner.nextLine();
         studentToBeUpdated.setName(newAddress);
     }
 
-        public void updateStudentForPhoneNo(String id, Scanner scanner){
+    public void updateStudentForPhoneNo(String id, Scanner scanner){
         Student studentToBeUpdated = this.searchStudentById(id);
         String newPhoneno = scanner.nextLine();
         studentToBeUpdated.setPhoneNo(newPhoneno);
     }
 
-        public void updateStudentForBloodGroup(String id, Scanner scanner){
+    public void updateStudentForBloodGroup(String id, Scanner scanner){
         Student studentToBeUpdated = this.searchStudentById(id);
         String bloodGroup = scanner.nextLine();
         studentToBeUpdated.setBloodGroup(bloodGroup);
     }
 
-        public void updateStudentForDob(String id, Scanner scanner){
+    public void updateStudentForDob(String id, Scanner scanner){
         Student studentToBeUpdated = this.searchStudentById(id);
         String newDob = scanner.nextLine();
         studentToBeUpdated.setDob(newDob);

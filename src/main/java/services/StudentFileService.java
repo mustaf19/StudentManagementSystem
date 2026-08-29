@@ -60,6 +60,7 @@ public class StudentFileService implements StudentRepository{
     public void save(Student student){
 
         List<Student> studentList = readStudentsFromFile();
+        studentList.add(student);
 
         try{
             String json = mapper.writeValueAsString(studentList);
@@ -114,13 +115,17 @@ public class StudentFileService implements StudentRepository{
     @Override
     public void update(Student student){
         List<Student> retStudent = readStudentsFromFile();
+        int count=0;
 
         for(Student x: retStudent){
             if(x.getId().equals(student.getId())){
-                retStudent.remove(x);
-                retStudent.add(student);
+                break;
             }
+            count+=1;
         }
+
+        retStudent.set(count, student);
+        System.out.println("Changed student: "+student);
 
         try{    
             String json = mapper.writeValueAsString(retStudent);
@@ -137,7 +142,11 @@ public class StudentFileService implements StudentRepository{
 
     @Override
     public List<Student> findAll(){
-        return readStudentsFromFile();
+        List<Student> retStudent = readStudentsFromFile();
+        for(Student x: retStudent){
+            System.out.println("x is:"+x);
+        }
+        return retStudent;
     }
 }
 

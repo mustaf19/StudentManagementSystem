@@ -45,7 +45,7 @@ public class Main{
             System.out.println("Current name: " + student.getName());
             System.out.println("Enter name to be changed");
             String name = scanner.nextLine();
-            service.updateStudent(id, "Name", name);
+            service.updateStudent(id, "NAME", name);
             System.out.println(student);
         }
     }
@@ -86,7 +86,6 @@ public class Main{
         // studentService.addStudent(new Student("1", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
         // studentService.addStudent(new Student("2", "Jane Smith", "jane.smith@example.com", "456 Elm St, Othertown, USA", "0987654321", "B-", "1991-02-02"));
         // studentService.addStudent(new Student("3", "Jim Beam", "jim.beam@example.com", "789 Oak St, Anothertown, USA", "3456789012", "C+", "1992-03-03"));
-
 
         while(true){
             // this.showMenu(); (this is used for objects and static class dont require this, as they dont have objects)

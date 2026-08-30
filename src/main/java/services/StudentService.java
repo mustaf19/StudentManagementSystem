@@ -111,6 +111,7 @@ public class StudentService{
             case "DOB": studentToBeUpdated.setDob(updatedValue); break;
             default: return false;
         }
+        System.out.println("Student to be udpated"+studentToBeUpdated);
         this.sri.update(studentToBeUpdated);
         return true;
     }

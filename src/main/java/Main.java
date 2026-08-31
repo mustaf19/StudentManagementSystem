@@ -25,7 +25,12 @@ public class Main{
 
         System.out.print("Enter phone: ");
         String number = scanner.nextLine();
-        service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", "1992-03-03" ));
+        if(service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", "1992-03-03" ))==true){
+            System.out.println("Student Added successfully!");
+        }
+        else{
+            System.out.println("Student Added Failed!");
+        }
     }
 
     private static void deleteStudent(Scanner scanner, StudentService service){
@@ -45,7 +50,12 @@ public class Main{
             System.out.println("Current name: " + student.getName());
             System.out.println("Enter name to be changed");
             String name = scanner.nextLine();
-            service.updateStudent(id, "NAME", name);
+            if(service.updateStudent(id, "NAME", name)==true){
+                System.out.println("Student updated successfully!");
+            }
+            else{
+                System.out.println("Student did not updated!");
+            }
             System.out.println(student);
         }
     }

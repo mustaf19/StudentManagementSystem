@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.HashSet;
 import objects.Student;
 import java.util.Collections;
-import java.util.Scanner;
+// import java.util.Scanner;
 // import services.StudentRepository; // same package doesnt require importing
 
 public class StudentService{
@@ -20,17 +20,13 @@ public class StudentService{
 
     public boolean checkEmail(String email){
         if(email!= null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") == false){
-            System.out.println("Something in Wmail is wrong");
-             System.out.println(email);
-             return false;
+            return false;
         }
         return true;
     }
 
     public boolean checkPhone(String phoneNo){
         if(phoneNo!= null && phoneNo.matches("\\d{10}$") == false){
-            System.out.println("Something in PhoneNo is wrong");
-            System.out.println(phoneNo);
             return false;
         }
         return true;
@@ -39,7 +35,6 @@ public class StudentService{
 
     public boolean isUniqueId(String id){
         if(studentIds.contains(id)){
-            System.out.println("Id already exists");
             return false;
         }
         return true;
@@ -81,7 +76,7 @@ public class StudentService{
             this.sri.deleteById(id);
         }
         catch(Exception e){
-            System.out.println("Exception occured");
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -90,7 +85,6 @@ public class StudentService{
     public boolean updateStudent(String id, String paramater, String updatedValue){
         Student studentToBeUpdated = this.searchStudentById(id);
         if(studentToBeUpdated==null || updatedValue==null || paramater ==null){
-            System.out.println("Can't find the student");
             return false;
         }
         // if(paramater.equals("Name")){
@@ -111,46 +105,45 @@ public class StudentService{
             case "DOB": studentToBeUpdated.setDob(updatedValue); break;
             default: return false;
         }
-        System.out.println("Student to be udpated"+studentToBeUpdated);
         this.sri.update(studentToBeUpdated);
         return true;
     }
 
-    public void updateStudentForName(String id, Scanner scanner){
-        Student studentToBeUpdated = this.searchStudentById(id);
-        String newName = scanner.nextLine();
-        studentToBeUpdated.setName(newName);
-    }
+    // public void updateStudentForName(String id, Scanner scanner){
+    //     Student studentToBeUpdated = this.searchStudentById(id);
+    //     String newName = scanner.nextLine();
+    //     studentToBeUpdated.setName(newName);
+    // }
 
-    public void updateStudentForEmail(String id, Scanner scanner){
-        Student studentToBeUpdated = this.searchStudentById(id);
-        String newEmail = scanner.nextLine();
-        studentToBeUpdated.setEmail(newEmail);
-    }
+    // public void updateStudentForEmail(String id, Scanner scanner){
+    //     Student studentToBeUpdated = this.searchStudentById(id);
+    //     String newEmail = scanner.nextLine();
+    //     studentToBeUpdated.setEmail(newEmail);
+    // }
 
-    public void updateStudentForAddress(String id, Scanner scanner){
-        Student studentToBeUpdated = this.searchStudentById(id);
-        String newAddress = scanner.nextLine();
-        studentToBeUpdated.setName(newAddress);
-    }
+    // public void updateStudentForAddress(String id, Scanner scanner){
+    //     Student studentToBeUpdated = this.searchStudentById(id);
+    //     String newAddress = scanner.nextLine();
+    //     studentToBeUpdated.setName(newAddress);
+    // }
 
-    public void updateStudentForPhoneNo(String id, Scanner scanner){
-        Student studentToBeUpdated = this.searchStudentById(id);
-        String newPhoneno = scanner.nextLine();
-        studentToBeUpdated.setPhoneNo(newPhoneno);
-    }
+    // public void updateStudentForPhoneNo(String id, Scanner scanner){
+    //     Student studentToBeUpdated = this.searchStudentById(id);
+    //     String newPhoneno = scanner.nextLine();
+    //     studentToBeUpdated.setPhoneNo(newPhoneno);
+    // }
 
-    public void updateStudentForBloodGroup(String id, Scanner scanner){
-        Student studentToBeUpdated = this.searchStudentById(id);
-        String bloodGroup = scanner.nextLine();
-        studentToBeUpdated.setBloodGroup(bloodGroup);
-    }
+    // public void updateStudentForBloodGroup(String id, Scanner scanner){
+    //     Student studentToBeUpdated = this.searchStudentById(id);
+    //     String bloodGroup = scanner.nextLine();
+    //     studentToBeUpdated.setBloodGroup(bloodGroup);
+    // }
 
-    public void updateStudentForDob(String id, Scanner scanner){
-        Student studentToBeUpdated = this.searchStudentById(id);
-        String newDob = scanner.nextLine();
-        studentToBeUpdated.setDob(newDob);
-    }
+    // public void updateStudentForDob(String id, Scanner scanner){
+    //     Student studentToBeUpdated = this.searchStudentById(id);
+    //     String newDob = scanner.nextLine();
+    //     studentToBeUpdated.setDob(newDob);
+    // }
 
 
     // =================

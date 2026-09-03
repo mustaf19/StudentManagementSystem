@@ -4,6 +4,9 @@ import services.StudentFileService;
 import objects.Student;
 import java.util.Scanner;
 import java.util.UUID;
+import exceptions.ValidationException;
+import exceptions.StudentNotFoundException;
+import exceptions.RepositoryException;
 // import com.fasterxml.jackson.databind.ObjectMapper;
 // import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -25,17 +28,26 @@ public class Main{
 
         System.out.print("Enter phone: ");
         String number = scanner.nextLine();
-        if(service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", "1992-03-03" ))==true){
-            System.out.println("Student Added successfully!");
+
+        try{
+            service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", "1992-03-03" ));
         }
-        else{
-            System.out.println("Student Added Failed!");
+        catch(ValidationException e){
+            e.printStackTrace();
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
 
     private static void deleteStudent(Scanner scanner, StudentService service){
         String id = scanner.nextLine();
-        service.deleteStudent(id);
+        try{
+            service.deleteStudent(id);
+        }
+        catch(StudentNotFoundException e){
+            e.printStackTrace();
+        }
     }
 
     private static void updateStudent(Scanner scanner, StudentService service){
@@ -83,10 +95,15 @@ public class Main{
     private static void searchStudent(Scanner scanner, StudentService service){
         System.out.println("Enter id of the student");
         String id = scanner.nextLine();
-        Student searchedStudent = service.searchStudentById(id);
-        if(searchedStudent!=null)
-            System.out.println(searchedStudent.toString());
-        else System.out.println("No student found with this id");
+        try{
+            Student searchedStudent = service.searchStudentById(id);
+        }
+        catch(StudentNotFoundException e){
+            e.printStackTrace();
+        }
+        if(searchedStudent!=null){
+            System.out.println("Student is :"+ searchedStudent.toString());
+        }
     }
 
     public static void main(String[] args){

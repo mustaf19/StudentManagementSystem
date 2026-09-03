@@ -31,26 +31,20 @@ public class StudentService{
         }
     }
 
-    public void isUniqueId(String id){
-        if(studentIds.contains(id)){
-            throw new ValidationException("Not unique id");
-        }
-    }
-
     public void addStudent(Student student){
         this.checkEmail(student.getEmail());
         this.checkPhone(student.getPhoneNo());
-        this.isUniqueId(student.getId());
+        // this.isUniqueId(student.getId());
         if(this.searchStudentById(student.getId())==null){
             try{
                 this.sri.save(student);
             }
             catch(Exception e){
-                e.printStackTrace();
+                throw new RepositoryException("Could not save student", e);
             }
         }
         else{
-            throw new ValidationException("Student is available");
+            throw new ValidationException("Student id already exists");
         }
     }
 
@@ -59,13 +53,7 @@ public class StudentService{
     }
 
     public Student searchStudentById(String id){
-        Student returnStudent = this.sri.findById(id);
-        if(returnStudent==null){
-            throw new StudentNotFoundException("Student with id "+id+" not found!");
-        }
-        else{
-            return returnStudent;
-        }
+        return this.sri.findById(id);
     }
 
 
@@ -79,15 +67,19 @@ public class StudentService{
             this.sri.deleteById(id);
         }
         catch(Exception e){
-            e.printStackTrace();
+           throw new RepositoryException("Cannot delete student "+id+ " not found.");
         }
     }
 
     public void updateStudent(String id, String paramater, String updatedValue){
         Student studentToBeUpdated = this.searchStudentById(id);
-        if(studentToBeUpdated==null || updatedValue==null || paramater ==null){
+        if(studentToBeUpdated==null){
             throw new StudentNotFoundException("Student not found!");
         }
+        else if( updatedValue==null || paramater ==null){
+            throw new ValidationException("Invalid item");
+        }
+
 
         switch(paramater){
             case "NAME": studentToBeUpdated.setName(updatedValue); break;

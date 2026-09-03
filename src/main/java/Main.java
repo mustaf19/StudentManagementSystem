@@ -62,13 +62,13 @@ public class Main{
             System.out.println("Current name: " + student.getName());
             System.out.println("Enter name to be changed");
             String name = scanner.nextLine();
-            if(service.updateStudent(id, "NAME", name)==true){
-                System.out.println("Student updated successfully!");
+            try{
+                service.updateStudent(id, "NAME", name);
             }
-            else{
-                System.out.println("Student did not updated!");
+            catch(StudentNotFoundException e){
+                e.printStackTrace();
             }
-            System.out.println(student);
+            System.out.println("updated Student "+student);
         }
     }
 
@@ -95,8 +95,9 @@ public class Main{
     private static void searchStudent(Scanner scanner, StudentService service){
         System.out.println("Enter id of the student");
         String id = scanner.nextLine();
+        Student searchedStudent=null;
         try{
-            Student searchedStudent = service.searchStudentById(id);
+            searchedStudent = service.searchStudentById(id);
         }
         catch(StudentNotFoundException e){
             e.printStackTrace();

@@ -1,7 +1,7 @@
 package exceptions;
 
 public class ValidationException extends RuntimeException{
-    ValidationException(String message){
+    public ValidationException(String message){
         super(message);
     }
 }

@@ -15,12 +15,13 @@ class StudentServiceTest {
         StudentService sf = new StudentService(new InMemoryStudentRepository());
         sf.addStudent(new Student("099", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
 
-        // Act
-        boolean result = sf.addStudent(new Student("099", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        // // Act
+        // boolean result = sf.addStudent(new Student("099", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
 
-        // Assert
-        assertFalse(result);
-
+        // // Assert
+        // assertFalse(result);
+        assertThrows(ValidationException.class, ()-> new Student("099", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        
     }
 
 

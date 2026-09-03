@@ -59,7 +59,13 @@ public class StudentService{
     }
 
     public Student searchStudentById(String id){
-        return this.sri.findById(id);
+        Student returnStudent = this.sri.findById(id);
+        if(returnStudent==null){
+            throw new StudentNotFoundException("Student with id "+id+" not found!");
+        }
+        else{
+            return returnStudent;
+        }
     }
 
 
@@ -80,7 +86,7 @@ public class StudentService{
     public void updateStudent(String id, String paramater, String updatedValue){
         Student studentToBeUpdated = this.searchStudentById(id);
         if(studentToBeUpdated==null || updatedValue==null || paramater ==null){
-            throw new StudentNotFoundException("Student no found");
+            throw new StudentNotFoundException("Student not found!");
         }
 
         switch(paramater){

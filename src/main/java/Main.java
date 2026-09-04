@@ -4,6 +4,7 @@ import services.StudentFileService;
 import objects.Student;
 import java.util.Scanner;
 import java.util.UUID;
+import java.time.LocalDate;
 import exceptions.ValidationException;
 import exceptions.StudentNotFoundException;
 import exceptions.RepositoryException;
@@ -30,7 +31,7 @@ public class Main{
         String number = scanner.nextLine();
 
         try{
-            service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", "1992-03-03" ));
+            service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", LocalDate.parse("1992-03-03")));
             System.out.println("Student added successfully!");
         }
         catch(ValidationException e){

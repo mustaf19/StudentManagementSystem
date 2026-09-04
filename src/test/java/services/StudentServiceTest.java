@@ -4,7 +4,12 @@ import org.junit.jupiter.api.Test;
 import objects.Student;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
+import java.time.LocalDate;
+
 import static org.mockito.Mockito.*;
+import exceptions.ValidationException;
+import exceptions.StudentNotFoundException;
+import exceptions.RepositoryException;
 
 class StudentServiceTest {
 
@@ -13,14 +18,14 @@ class StudentServiceTest {
 
         // Arrange
         StudentService sf = new StudentService(new InMemoryStudentRepository());
-        sf.addStudent(new Student("099", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        sf.addStudent(new Student("099", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
         // // Act
         // boolean result = sf.addStudent(new Student("099", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
 
         // // Assert
         // assertFalse(result);
-        assertThrows(ValidationException.class, ()-> new Student("099", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        assertThrows(ValidationException.class, ()-> sf.addStudent(new Student("099", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01"))));
         
     }
 
@@ -31,10 +36,10 @@ class StudentServiceTest {
         // Arrange
         StudentService sf = new StudentService(new InMemoryStudentRepository());
         // Act
-        boolean result = sf.addStudent(new Student("1000", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        assertDoesNotThrow(()-> sf.addStudent(new Student("1000", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01"))));
 
         // Assert
-        assertTrue(result);
+        // assertTrue(result);
 
     }
 
@@ -45,7 +50,7 @@ class StudentServiceTest {
         // Arrange
         StudentService sf = new StudentService(new InMemoryStudentRepository());
         // Act
-        boolean result = sf.addStudent(new Student("1000", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        sf.addStudent(new Student("1000", "John Doe 2", "john.doe2@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
         Student st = sf.searchStudentById("1000");
 
@@ -67,17 +72,17 @@ class StudentServiceTest {
     void deletedStudentShouldNotBePresent(){
         // Arrange
         StudentService sf = new StudentService(new InMemoryStudentRepository());
-        boolean addResult = sf.addStudent(new Student("1005", "Juhnny Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        sf.addStudent(new Student("1005", "Juhnny Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
 
         // Act
-        boolean result = sf.deleteStudent("1005");
+        sf.deleteStudent("1005");
         Student st = sf.searchStudentById("1005");
 
 
         // Assert
-        assertTrue(addResult);
-        assertTrue(result);
+        // assertTrue(addResult);
+        // assertTrue(result);
         assertNull(st);
         
     }
@@ -87,53 +92,53 @@ class StudentServiceTest {
     void deletingNonExistingStudent(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        boolean result = sf.deleteStudent("10000");
+        assertThrows(StudentNotFoundException.class,()->sf.deleteStudent("10000"));
 
-        assertFalse(result);
+        // assertFalse(result);
     }
 
 
     @Test
     void updateExistingStudent(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
-        sf.addStudent(new Student("1006", "JOhn A", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        sf.addStudent(new Student("1006", "JOhn A", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
-        boolean rs = sf.updateStudent("1006", "NAME", "John Updated");
+        sf.updateStudent("1006", "NAME", "John Updated");
 
-        assertTrue(rs);
+        // assertTrue(rs);
         assertEquals("John Updated", sf.searchStudentById("1006").getName());
     }
 
     @Test
     void updateExistingStudentWithWrongFormatEmail(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
-        sf.addStudent(new Student("2001", "JOhn B", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        sf.addStudent(new Student("2001", "JOhn B", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
-        boolean rs = sf.updateStudent("2001", "EMAIL", "john.engexample.com");
+        assertThrows(ValidationException.class, ()->sf.updateStudent("2001", "EMAIL", "john.engexample.com"));
 
-        assertFalse(rs);
+        // assertFalse(rs);
         assertEquals("john.eng@example.com", sf.searchStudentById("2001").getEmail());
     }
 
     @Test
     void updateExistingStudentWithWrongFormatPhoneNo(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
-        sf.addStudent(new Student("2002", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        sf.addStudent(new Student("2002", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
-        boolean rs = sf.updateStudent("2002", "PHONENO", "123456");
+        assertThrows(ValidationException.class, ()->sf.updateStudent("2002", "PHONENO", "123456"));
 
-        assertFalse(rs);
+        // assertFalse(rs);
         assertEquals("1234567890", sf.searchStudentById("2002").getPhoneNo());
     }
 
     @Test
     void updatingNonExistingParameter(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
-        sf.addStudent(new Student("2002", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+        sf.addStudent(new Student("2002", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
-        boolean rs = sf.updateStudent("2002", "sdsdv", "csdvsr");
+        assertThrows(ValidationException.class, ()->sf.updateStudent("2002", "sdsdv", "csdvsr"));
 
-        assertFalse(rs);
+        // assertFalse(rs);
     }
 
     
@@ -141,9 +146,9 @@ class StudentServiceTest {
     void updateNonExistingStudent(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        boolean rs = sf.updateStudent("1007", "NAME", "John");
+        assertThrows(StudentNotFoundException.class, ()->sf.updateStudent("1007", "NAME", "John"));
 
-        assertFalse(rs);
+        // assertFalse(rs);
     }
 
 
@@ -151,63 +156,65 @@ class StudentServiceTest {
     void checkCorrectEmail(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        boolean result = sf.checkEmail("john.doe@gmail.com");
+        sf.checkEmail("john.doe@gmail.com");
 
-        assertTrue(result);
+        // assertTrue(result);
     }
 
     @Test
-    void checkInCorrectEmail(){
+    void checkIncorrectEmail(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        boolean result = sf.checkEmail("john.doegmail.com");
+        assertThrows(ValidationException.class, ()->sf.checkEmail("john.doegmail.com"));
 
-        assertFalse(result);
+        // assertFalse(result);
     }
 
     @Test
     void checkCorrectPhoneNo(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        boolean result = sf.checkPhone("9876543210");
+        sf.checkPhone("9876543210");
 
-        assertTrue(result);
+        // assertTrue(result);
     }
 
     @Test
-    void checkInCorrectPhoneNo(){
+    void checkIncorrectPhoneNo(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        boolean result = sf.checkPhone("9876");
+        assertThrows(ValidationException.class, ()->sf.checkPhone("9876"));
 
-        assertFalse(result);
+        // assertFalse(result);
     }
 
     @Test
     void addingWithInvalidPhone(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        boolean rs = sf.addStudent(new Student("1007", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "12345", "A+", "1990-01-01"));
+        assertThrows(ValidationException.class, ()->sf.addStudent(new Student("1007", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "12345", "A+", LocalDate.parse("1990-01-01"))));
 
-        assertFalse(rs);
+        // assertFalse(rs);
+        assertTrue(ex.getMessage().toLowerCase().contains("phone"));
+
     }
 
     @Test
     void addingWithInvalidEmail(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        boolean rs = sf.addStudent(new Student("1008", "JOhn Eng", "john.engexample.com", "123 Main St, Anytown, USA", "9087654321", "A+", "1990-01-01"));
+        assertThrows(ValidationException.class, ()->sf.addStudent(new Student("1008", "JOhn Eng", "john.engexample.com", "123 Main St, Anytown, USA", "9087654321", "A+", LocalDate.parse("1990-01-01"))));
 
-        assertFalse(rs);
+        // assertFalse(rs);
     }
 
     @Test
     void addingToFailingSaveData(){
         StudentService sf = new StudentService(new FailingRepository());
 
-        boolean rs = sf.addStudent(new Student("1009", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "9087654321", "A+", "1990-01-01"));
+        assertThrows(RepositoryException.class, ()->sf.addStudent(new Student("1009", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "9087654321", "A+", LocalDate.parse("1990-01-01"))));
 
-        assertFalse(rs);
+        // assertFalse(rs);
     }
 
     @Test
@@ -221,7 +228,7 @@ class StudentServiceTest {
         StudentService sf = new StudentService(repository);
 
         // Act
-        sf.addStudent(new Student("1010", "Summer Von", "sum.von@example.com", "123 Main St, Anytown, USA", "9087654321", "A+", "1990-01-01"));
+        sf.addStudent(new Student("1010", "Summer Von", "sum.von@example.com", "123 Main St, Anytown, USA", "9087654321", "A+", LocalDate.parse("1990-01-01")));
 
 
         // sf.addStudent(student);

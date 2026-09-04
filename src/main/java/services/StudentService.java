@@ -20,7 +20,7 @@ public class StudentService{
     }
 
     public void checkEmail(String email){
-        if(email!= null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") == false){
+        if(email== null || email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") == false){
             throw new ValidationException("Invalid Email");
         }
     }
@@ -54,6 +54,13 @@ public class StudentService{
 
     public Student searchStudentById(String id){
         return this.sri.findById(id);
+        // Student foundStudent = null;
+        // try{
+        //     foundStudent= this.sri.findById(id);
+        // }
+        // catch(Exception e){
+        //     throw new StudentNotFoundException("Student not found with id: ");
+        // }
     }
 
 
@@ -67,7 +74,7 @@ public class StudentService{
             this.sri.deleteById(id);
         }
         catch(Exception e){
-           throw new RepositoryException("Cannot delete student "+id+ " not found.");
+           throw new RepositoryException("Cannot delete student "+id, e);
         }
     }
 
@@ -96,6 +103,11 @@ public class StudentService{
             case "DOB": studentToBeUpdated.setDob(updatedValue); break;
             default: throw new ValidationException("Unknown field: " + paramater);
         }
-        this.sri.update(studentToBeUpdated);
+        try{
+            this.sri.update(studentToBeUpdated);
+        }
+        catch(Exception e){
+            throw new RepositoryException("Not updated!", e);
+        }
     }
 }

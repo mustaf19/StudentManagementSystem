@@ -31,12 +31,13 @@ public class Main{
 
         try{
             service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", "1992-03-03" ));
+            System.out.println("Student added successfully!");
         }
         catch(ValidationException e){
-            e.printStackTrace();
+            System.out.println("e message " +e.getMessage());
         }
-        catch(Exception e){
-            e.printStackTrace();
+        catch(RepositoryException e){
+            System.out.println("e message " +e.getMessage());
         }
     }
 
@@ -44,9 +45,13 @@ public class Main{
         String id = scanner.nextLine();
         try{
             service.deleteStudent(id);
+            System.out.println("Student deleted successfully!");
         }
         catch(StudentNotFoundException e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        catch(RepositoryException e){
+             System.out.println(e.getMessage());
         }
     }
 
@@ -54,22 +59,26 @@ public class Main{
 
         System.out.println("Enter id of student to be updated");
         String id = scanner.nextLine();
-        Student student = service.searchStudentById(id);
-        if(student == null){
-            System.out.println("Student not found");
-        }
-        else{
-            System.out.println("Current name: " + student.getName());
+
+
+        try{
+            // System.out.println("Current name: " + student.getName());
             System.out.println("Enter name to be changed");
             String name = scanner.nextLine();
-            try{
-                service.updateStudent(id, "NAME", name);
-            }
-            catch(StudentNotFoundException e){
-                e.printStackTrace();
-            }
-            System.out.println("updated Student "+student);
+            service.updateStudent(id, "NAME", name);
+            System.out.println("Student is updated!");
         }
+        catch(StudentNotFoundException e){
+            System.out.println("e message " +e.getMessage());
+        }
+        catch(ValidationException e){
+            System.out.println("e message " +e.getMessage());
+        }
+        catch(RepositoryException e){
+            System.out.println("e message " +e.getMessage());
+        }
+
+        
     }
 
     private static void showStudents(StudentService service){
@@ -100,7 +109,7 @@ public class Main{
             searchedStudent = service.searchStudentById(id);
         }
         catch(StudentNotFoundException e){
-            e.printStackTrace();
+            System.out.println("e message " +e.getMessage());
         }
         if(searchedStudent!=null){
             System.out.println("Student is :"+ searchedStudent.toString());

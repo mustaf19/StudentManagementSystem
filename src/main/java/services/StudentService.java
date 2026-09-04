@@ -1,11 +1,10 @@
 package services;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 import objects.Student;
 import java.util.Collections;
+import java.time.LocalDate;
+
 import exceptions.ValidationException;
 import exceptions.StudentNotFoundException;
 import exceptions.RepositoryException;
@@ -13,7 +12,6 @@ import exceptions.RepositoryException;
 public class StudentService{
 
     private final StudentRepository sri;
-    private Set<String> studentIds = new HashSet<String>();
 
     public StudentService(StudentRepository sri){
         this.sri = sri;
@@ -34,7 +32,6 @@ public class StudentService{
     public void addStudent(Student student){
         this.checkEmail(student.getEmail());
         this.checkPhone(student.getPhoneNo());
-        // this.isUniqueId(student.getId());
         if(this.searchStudentById(student.getId())==null){
             try{
                 this.sri.save(student);
@@ -80,6 +77,7 @@ public class StudentService{
 
     public void updateStudent(String id, String paramater, String updatedValue){
         Student studentToBeUpdated = this.searchStudentById(id);
+
         if(studentToBeUpdated==null){
             throw new StudentNotFoundException("Student not found!");
         }
@@ -100,7 +98,7 @@ public class StudentService{
                 this.checkEmail(updatedValue);
                 studentToBeUpdated.setEmail(updatedValue); 
                 break;
-            case "DOB": studentToBeUpdated.setDob(updatedValue); break;
+            case "DOB": studentToBeUpdated.setDob(LocalDate.parse(updatedValue)); break;
             default: throw new ValidationException("Unknown field: " + paramater);
         }
         try{

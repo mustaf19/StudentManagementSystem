@@ -1,5 +1,6 @@
 package objects;
 
+import java.time.LocalDate;
 
 public class Student{
     private String id;
@@ -8,11 +9,11 @@ public class Student{
     private String address;
     private String phoneNo;
     private String bloodGroup;
-    private String dob;
+    private LocalDate dob;
 
     public Student(){}
     
-    public Student(String id, String name, String email, String address, String phoneNo, String bloodGroup, String dob){
+    public Student(String id, String name, String email, String address, String phoneNo, String bloodGroup, LocalDate dob){
         this.id = id;
         this.name = name;
         this.email = email;
@@ -46,7 +47,7 @@ public class Student{
         return this.bloodGroup;
     }
 
-    public String getDob(){
+    public LocalDate getDob(){
         return this.dob;
     }
 
@@ -74,7 +75,7 @@ public class Student{
         this.bloodGroup = bloodGroup;
     }
 
-    public void setDob(String dob){
+    public void setDob(LocalDate dob){
         this.dob = dob;
     }      
 

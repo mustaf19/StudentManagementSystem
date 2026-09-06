@@ -17,6 +17,10 @@ public class StudentService{
         this.sri = sri;
     }
 
+    public enum UpdateField {
+        NAME, EMAIL, DOB, PHONENO, ADDRESS
+    };
+
     public void checkEmail(String email){
         if(email== null || email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") == false){
             throw new ValidationException("Invalid Email");
@@ -75,7 +79,7 @@ public class StudentService{
         }
     }
 
-    public void updateStudent(String id, String paramater, String updatedValue){
+    public void updateStudent(String id, UpdateField paramater, String updatedValue){
         Student studentToBeUpdated = this.searchStudentById(id);
 
         if(studentToBeUpdated==null){
@@ -87,18 +91,18 @@ public class StudentService{
 
 
         switch(paramater){
-            case "NAME": studentToBeUpdated.setName(updatedValue); break;
-            case "ADDRESS": 
+            case NAME: studentToBeUpdated.setName(updatedValue); break;
+            case ADDRESS: 
                 studentToBeUpdated.setAddress(updatedValue); break;
-            case "PHONENO": 
+            case PHONENO: 
                 this.checkPhone(updatedValue);
                 studentToBeUpdated.setPhoneNo(updatedValue);
                 break;
-            case "EMAIL": 
+            case EMAIL: 
                 this.checkEmail(updatedValue);
                 studentToBeUpdated.setEmail(updatedValue); 
                 break;
-            case "DOB": studentToBeUpdated.setDob(LocalDate.parse(updatedValue)); break;
+            case DOB: studentToBeUpdated.setDob(LocalDate.parse(updatedValue)); break;
             default: throw new ValidationException("Unknown field: " + paramater);
         }
         try{

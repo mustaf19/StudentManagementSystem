@@ -13,6 +13,7 @@ import exceptions.RepositoryException;
 
 
 public class Main{
+
     private static void showMenu(){
         System.out.println("1. add\n2. delete\n3.update\n4.get Students\n and above exit");
 
@@ -66,7 +67,7 @@ public class Main{
             // System.out.println("Current name: " + student.getName());
             System.out.println("Enter name to be changed");
             String name = scanner.nextLine();
-            service.updateStudent(id, "NAME", name);
+            service.updateStudent(id, StudentService.UpdateField.NAME, name);
             System.out.println("Student is updated!");
         }
         catch(StudentNotFoundException e){

@@ -103,7 +103,7 @@ class StudentServiceTest {
         StudentService sf = new StudentService(new InMemoryStudentRepository());
         sf.addStudent(new Student("1006", "JOhn A", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
-        sf.updateStudent("1006", "NAME", "John Updated");
+        sf.updateStudent("1006", StudentService.UpdateField.NAME, "John Updated");
 
         // assertTrue(rs);
         assertEquals("John Updated", sf.searchStudentById("1006").getName());
@@ -114,7 +114,7 @@ class StudentServiceTest {
         StudentService sf = new StudentService(new InMemoryStudentRepository());
         sf.addStudent(new Student("2001", "JOhn B", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
-        assertThrows(ValidationException.class, ()->sf.updateStudent("2001", "EMAIL", "john.engexample.com"));
+        assertThrows(ValidationException.class, ()->sf.updateStudent("2001", StudentService.UpdateField.EMAIL, "john.engexample.com"));
 
         // assertFalse(rs);
         assertEquals("john.eng@example.com", sf.searchStudentById("2001").getEmail());
@@ -125,7 +125,7 @@ class StudentServiceTest {
         StudentService sf = new StudentService(new InMemoryStudentRepository());
         sf.addStudent(new Student("2002", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
-        assertThrows(ValidationException.class, ()->sf.updateStudent("2002", "PHONENO", "123456"));
+        assertThrows(ValidationException.class, ()->sf.updateStudent("2002", StudentService.UpdateField.PHONENO, "123456"));
 
         // assertFalse(rs);
         assertEquals("1234567890", sf.searchStudentById("2002").getPhoneNo());
@@ -136,7 +136,7 @@ class StudentServiceTest {
         StudentService sf = new StudentService(new InMemoryStudentRepository());
         sf.addStudent(new Student("2002", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
-        assertThrows(ValidationException.class, ()->sf.updateStudent("2002", "sdsdv", "csdvsr"));
+        assertThrows(IllegalArgumentException.class, ()->sf.updateStudent("2002",StudentService.UpdateField.valueOf("vre") , "csdvsr"));
 
         // assertFalse(rs);
     }
@@ -146,7 +146,7 @@ class StudentServiceTest {
     void updateNonExistingStudent(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        assertThrows(StudentNotFoundException.class, ()->sf.updateStudent("1007", "NAME", "John"));
+        assertThrows(StudentNotFoundException.class, ()->sf.updateStudent("1007", StudentService.UpdateField.NAME, "John"));
 
         // assertFalse(rs);
     }
@@ -192,7 +192,7 @@ class StudentServiceTest {
     void addingWithInvalidPhone(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        assertThrows(ValidationException.class, ()->sf.addStudent(new Student("1007", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "12345", "A+", LocalDate.parse("1990-01-01"))));
+        ValidationException ex =assertThrows(ValidationException.class, ()->sf.addStudent(new Student("1007", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "12345", "A+", LocalDate.parse("1990-01-01"))));
 
         // assertFalse(rs);
         assertTrue(ex.getMessage().toLowerCase().contains("phone"));

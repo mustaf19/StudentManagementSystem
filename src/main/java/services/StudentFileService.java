@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.FileReader;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
+import exceptions.StudentNotFoundException;
 
 public class StudentFileService implements StudentRepository{
 
@@ -56,12 +57,8 @@ public class StudentFileService implements StudentRepository{
 
     }
 
-    @Override
-    public void save(Student student){
 
-        List<Student> studentList = readStudentsFromFile();
-        studentList.add(student);
-
+    private void writeAll(List<Student> studentList){
         try{
             String json = mapper.writeValueAsString(studentList);
             try(FileWriter writer = new FileWriter(filePath)){
@@ -73,6 +70,27 @@ public class StudentFileService implements StudentRepository{
         catch(JsonProcessingException e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void save(Student student){
+
+        List<Student> studentList = this.readStudentsFromFile();
+        studentList.add(student);
+
+        this.writeAll(studentList);
+
+        // try{
+        //     String json = mapper.writeValueAsString(studentList);
+        //     try(FileWriter writer = new FileWriter(filePath)){
+        //         System.out.println(json);
+        //         writer.write(json);
+        //     }
+        //     catch(IOException e){ e.printStackTrace();}
+        // }
+        // catch(JsonProcessingException e){
+        //     e.printStackTrace();
+        // }
     }
 
     @Override
@@ -99,17 +117,19 @@ public class StudentFileService implements StudentRepository{
             }
         }
 
-        try{    
-            String json = mapper.writeValueAsString(retStudent);
-            try(FileWriter writer = new FileWriter(filePath)){
-                System.out.println(json);
-                writer.write(json);
-            }
-            catch(IOException e){ e.printStackTrace();}
-        }
-        catch(JsonProcessingException e){
-            e.printStackTrace();
-        }
+        this.writeAll(retStudent);
+
+        // try{    
+        //     String json = mapper.writeValueAsString(retStudent);
+        //     try(FileWriter writer = new FileWriter(filePath)){
+        //         System.out.println(json);
+        //         writer.write(json);
+        //     }
+        //     catch(IOException e){ e.printStackTrace();}
+        // }
+        // catch(JsonProcessingException e){
+        //     e.printStackTrace();
+        // }
     }
 
     @Override
@@ -117,27 +137,34 @@ public class StudentFileService implements StudentRepository{
         List<Student> retStudent = readStudentsFromFile();
         int count=0;
 
+        boolean found=false;
         for(Student x: retStudent){
             if(x.getId().equals(student.getId())){
+                found=true;
                 break;
             }
             count+=1;
+        }
+        if(!found){
+            throw new StudentNotFoundException("Student not found during update");
         }
 
         retStudent.set(count, student);
         System.out.println("Changed student: "+student);
 
-        try{    
-            String json = mapper.writeValueAsString(retStudent);
-            try(FileWriter writer = new FileWriter(filePath)){
-                System.out.println(json);
-                writer.write(json);
-            }
-            catch(IOException e){ e.printStackTrace();}
-        }
-        catch(JsonProcessingException e){
-            e.printStackTrace();
-        }
+        this.writeAll(retStudent);
+
+        // try{    
+        //     String json = mapper.writeValueAsString(retStudent);
+        //     try(FileWriter writer = new FileWriter(filePath)){
+        //         System.out.println(json);
+        //         writer.write(json);
+        //     }
+        //     catch(IOException e){ e.printStackTrace();}
+        // }
+        // catch(JsonProcessingException e){
+        //     e.printStackTrace();
+        // }
     }
 
     @Override

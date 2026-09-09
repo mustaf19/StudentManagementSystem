@@ -2,9 +2,13 @@ package services;
 
 import java.util.*;
 import objects.Student;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 
-public interface StudentRepositoryNew {
+public class JdbcStudentRepository implements StudentRepository {
+
+    private final Connection connection;
 
     void save(Student student);
 

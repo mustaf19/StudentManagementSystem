@@ -1,6 +1,7 @@
 import java.util.List;
 import services.StudentService;
 import services.StudentFileService;
+import services.JdbcStudentRepository;
 import objects.Student;
 import java.util.Scanner;
 import java.util.UUID;
@@ -120,7 +121,9 @@ public class Main{
 
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
-        StudentService studentService = new StudentService(new StudentFileService());
+        Connection connection = DriverManager.getConnection("jdbc:sqlite:students.db");
+        // StudentService studentService = new StudentService(new StudentFileService());
+        StudentService studentService = new StudentService(new JdbcStudentRepository(connection));
 
         // studentService.addStudent(new Student("1", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
         // studentService.addStudent(new Student("2", "Jane Smith", "jane.smith@example.com", "456 Elm St, Othertown, USA", "0987654321", "B-", "1991-02-02"));

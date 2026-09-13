@@ -10,13 +10,51 @@ public class JdbcStudentRepository implements StudentRepository {
 
     private final Connection connection;
 
-    void save(Student student);
+    public JdbcStudentRepository(Connection connection){
+        this.connection=connection;
+        createTableIfNotExist();
+    }
 
-    Student findById(String id);
+    private void createTableIfNotExist() {
+        String sql = "CREATE TABLE IF NOT EXISTS students ("
+            + "id TEXT PRIMARY KEY,"
+            + "name TEXT,"
+            + "email TEXT,"
+            + "address TEXT,"
+            + "phone_no TEXT,"
+            + "blood_group TEXT,"
+            + "dob TEXT"
+            + ")";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            throw new RepositoryException("Could not create students table", e);
+        }
+    }
 
-    void deleteById(String id);
+    @Override
+    public void save(Student student){
+        String sql = "INSERT INTO students "
 
-    void update(Student student);
+    }
 
-    List<Student> findAll();
+    @Override
+    public Student findById(String id){
+        return null;
+    }
+
+    @Override
+    public void deleteById(String id){
+
+    }
+
+    @Override
+    public void update(Student student){
+
+    }
+
+    @Override
+    public List<Student> findAll(){
+        return new ArrayList<Student>();
+    }
 }

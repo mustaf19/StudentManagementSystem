@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import exceptions.ValidationException;
 import exceptions.StudentNotFoundException;
 import exceptions.RepositoryException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 // import com.fasterxml.jackson.databind.ObjectMapper;
 // import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -121,7 +123,14 @@ public class Main{
 
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
-        Connection connection = DriverManager.getConnection("jdbc:sqlite:students.db");
+        Connection connection;
+        try{
+            connection = DriverManager.getConnection("jdbc:sqlite:students.db");
+        }
+        catch(Exception e){
+            System.out.println("DriverManager exception occured! ->"+ e.getMessage());
+            return;
+        }
         // StudentService studentService = new StudentService(new StudentFileService());
         StudentService studentService = new StudentService(new JdbcStudentRepository(connection));
 

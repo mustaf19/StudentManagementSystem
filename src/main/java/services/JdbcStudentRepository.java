@@ -74,10 +74,10 @@ public class JdbcStudentRepository implements StudentRepository {
 
     @Override
     public void deleteById(String id){
-        String sql = "DELETE * FROM students WHERE id=?;";
+        String sql = "DELETE FROM students WHERE id=?;";
         try(PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setString(1, id);
-            ps.executeQuery();
+            ps.executeUpdate();
         }
         catch(SQLException e){
             throw new RepositoryException("Delete operation didn't performed! at id:"+id, e);

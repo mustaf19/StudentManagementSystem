@@ -66,25 +66,76 @@ public class JdbcStudentRepository implements StudentRepository {
                 }
                 return null;
             }
-            catch(SQLException e){
-                throw new RepositoryException("Student could not be found!"+id, e);
-            }
+        }
+        catch(SQLException e){
+            throw new RepositoryException("Student could not be found!"+id, e);
         }
     }
 
     @Override
     public void deleteById(String id){
-
+        String sql = "DELETE * FROM students WHERE id=?;";
+        try(PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setString(1, id);
+            ps.executeQuery();
+        }
+        catch(SQLException e){
+            throw new RepositoryException("Delete operation didn't performed! at id:"+id, e);
+        }
     }
 
     @Override
     public void update(Student student){
-
+        String sql = "UPDATE students SET name =?, email=?, address=?, phone_no=?, blood_group = ?, dob=? where id=?";
+        try(PreparedStatement ps = connection.prepareStatement(sql)){
+            bindStudent(ps, student, true);
+            ps.executeUpdate();
+        }
+        catch(SQLException e){
+            throw new RepositoryException("Could not delete student "+student.getId(), e);
+        }
     }
 
     @Override
     public List<Student> findAll(){
-        return new ArrayList<Student>();
+        String sql = "SELECT * from students;";
+        List<Student> students = new ArrayList<>();
+        try(PreparedStatement ps = connection.prepareStatement(sql)){
+            try(ResultSet rs = ps.executeQuery()){
+                while(rs.next()){
+                    students.add(mapRowToStudent(rs));
+                }
+            }
+            return students;
+        }
+        catch(SQLException e){
+            throw new RepositoryException("Student could not be found!", e);
+        }
+    }
+
+    private void bindStudent(PreparedStatement ps, Student student, boolean update) throws SQLException{
+        if(update){
+            ps.setString(1, student.getName());
+            ps.setString(2, student.getEmail());
+            ps.setString(3, student.getAddress());
+            ps.setString(4, student.getPhoneNo());
+            ps.setString(5, student.getBloodGroup());
+            ps.setString(6, dobToText(student.getDob()));
+            ps.setString(7, student.getId());
+        }
+        else{
+            ps.setString(1, student.getId());
+            ps.setString(2, student.getName());
+            ps.setString(3, student.getEmail());
+            ps.setString(4, student.getAddress());
+            ps.setString(5, student.getPhoneNo());
+            ps.setString(6, student.getBloodGroup());
+            ps.setString(7, dobToText(student.getDob()));
+        }
+    }
+
+    private String dobToText(LocalDate ld){
+        return ld==null?null:ld.toString();
     }
 
     private Student mapRowToStudent(ResultSet rs) throws SQLException{

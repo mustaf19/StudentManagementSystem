@@ -2,6 +2,7 @@ package services;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 import objects.Student;
 
 class FailingRepository implements StudentRepository{
@@ -12,8 +13,8 @@ class FailingRepository implements StudentRepository{
     }
 
     @Override
-    public Student findById(String id){
-        return null;
+    public Optional<Student> findById(String id){
+        return Optional.empty();
     }
 
     @Override

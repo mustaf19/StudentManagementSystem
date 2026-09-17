@@ -8,7 +8,7 @@ public interface StudentRepository {
 
     void save(Student student);
 
-    Student findById(String id);
+    Optional<Student> findById(String id);
 
     void deleteById(String id);
 

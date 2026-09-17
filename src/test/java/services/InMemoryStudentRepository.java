@@ -2,6 +2,7 @@ package services;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 import objects.Student;
 
 public class InMemoryStudentRepository implements StudentRepository {
@@ -12,13 +13,13 @@ public class InMemoryStudentRepository implements StudentRepository {
         students.add(student);
     }
 
-    public Student findById(String id){
+    public Optional<Student> findById(String id){
         for(Student x: students){
             if(x.getId().equals(id)){
-                return x;
+                return Optional.of(x);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public void deleteById(String id){

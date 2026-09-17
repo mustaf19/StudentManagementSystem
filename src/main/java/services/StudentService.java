@@ -54,7 +54,7 @@ public class StudentService{
     }
 
     public Student searchStudentById(String id){
-        return this.sri.findById(id);
+        return this.sri.findById(id).orElse(null);
         // Student foundStudent = null;
         // try{
         //     foundStudent= this.sri.findById(id);

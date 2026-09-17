@@ -56,15 +56,15 @@ public class JdbcStudentRepository implements StudentRepository {
     }
 
     @Override
-    public Student findById(String id){
+    public Optional<Student> findById(String id){
         String sql = "SELECT * FROM students where id=?;";
         try(PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setString(1, id);
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return mapRowToStudent(rs);
+                    return Optional.of(mapRowToStudent(rs));
                 }
-                return null;
+                return Optional.empty();
             }
         }
         catch(SQLException e){

@@ -1,6 +1,7 @@
 package services;
 
 import java.util.List;
+import java.util.Optional;
 import objects.Student;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -94,16 +95,16 @@ public class StudentFileService implements StudentRepository{
     }
 
     @Override
-    public Student findById(String id){
+    public Optional<Student> findById(String id){
         
         List<Student> retStudent = readStudentsFromFile();
 
         for(Student x: retStudent){
             if(x.getId().equals(id)){
-                return x;
+                return Optional.of(x);
             }
         }
-        return null;
+        return Optional.empty();
 
     }
 

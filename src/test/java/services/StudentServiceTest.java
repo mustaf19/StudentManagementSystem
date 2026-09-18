@@ -63,9 +63,9 @@ class StudentServiceTest {
     void shouldReturnNullWhenStudentDoesNotExist(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        Student st = sf.searchStudentById("10000");
+        assertThrows(StudentNotFoundException.class,()->sf.searchStudentById("10000"));
 
-        assertNull(st);
+        // assertNull(st);
     }
 
     @Test
@@ -77,13 +77,13 @@ class StudentServiceTest {
 
         // Act
         sf.deleteStudent("1005");
-        Student st = sf.searchStudentById("1005");
+        assertThrows(StudentNotFoundException.class,()-> sf.searchStudentById("1005"));
 
 
         // Assert
         // assertTrue(addResult);
         // assertTrue(result);
-        assertNull(st);
+        // assertNull(st);
         
     }
 

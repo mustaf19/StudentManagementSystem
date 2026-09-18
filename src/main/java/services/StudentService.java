@@ -36,16 +36,15 @@ public class StudentService{
     public void addStudent(Student student){
         this.checkEmail(student.getEmail());
         this.checkPhone(student.getPhoneNo());
-        if(this.searchStudentById(student.getId())==null){
+        if(this.sri.findById(student.getId()).isPresent())
+            throw new ValidationException("Student id already exists");
+        else{
             try{
                 this.sri.save(student);
             }
             catch(Exception e){
                 throw new RepositoryException("Could not save student", e);
             }
-        }
-        else{
-            throw new ValidationException("Student id already exists");
         }
     }
 
@@ -54,7 +53,7 @@ public class StudentService{
     }
 
     public Student searchStudentById(String id){
-        return this.sri.findById(id).orElse(null);
+        return this.sri.findById(id).orElseThrow(() -> new StudentNotFoundException("Student not found with id: "));
         // Student foundStudent = null;
         // try{
         //     foundStudent= this.sri.findById(id);
@@ -68,24 +67,21 @@ public class StudentService{
     public void deleteStudent(String id){
         Student studentTobeDeleted = this.searchStudentById(id);
 
-        if(studentTobeDeleted == null){
-            throw new StudentNotFoundException("Student with id "+id+ " not found.");
-        }
         try{
             this.sri.deleteById(id);
         }
         catch(Exception e){
-           throw new RepositoryException("Cannot delete student "+id, e);
+            new StudentNotFoundException("Student with id "+id+ " not found.");
         }
     }
 
     public void updateStudent(String id, UpdateField paramater, String updatedValue){
         Student studentToBeUpdated = this.searchStudentById(id);
 
-        if(studentToBeUpdated==null){
-            throw new StudentNotFoundException("Student not found!");
-        }
-        else if( updatedValue==null || paramater ==null){
+        // if(studentToBeUpdated==null){
+        //     throw new StudentNotFoundException("Student not found!");
+        // }
+        if( updatedValue==null || paramater ==null){
             throw new ValidationException("Invalid item");
         }
 
@@ -111,5 +107,6 @@ public class StudentService{
         catch(Exception e){
             throw new RepositoryException("Not updated!", e);
         }
+
     }
 }

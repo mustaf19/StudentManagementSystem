@@ -9,6 +9,7 @@ import exceptions.ValidationException;
 import exceptions.StudentNotFoundException;
 import exceptions.RepositoryException;
 
+@Service
 public class StudentService{
 
     private final StudentRepository sri;

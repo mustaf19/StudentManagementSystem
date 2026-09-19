@@ -1,3 +1,20 @@
+import java.util.List;
+import services.StudentService;
+import services.StudentFileService;
+import services.JdbcStudentRepository;
+import objects.Student;
+import java.util.Scanner;
+import java.util.UUID;
+import java.time.LocalDate;
+import exceptions.ValidationException;
+import exceptions.StudentNotFoundException;
+import exceptions.RepositoryException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/students")
 public class StudentController {
@@ -25,11 +42,11 @@ public class StudentController {
 
     @PutMapping("/{id}")
     public void updateStudent(@PathVariable String id, @Valid @RequestBody Student student){
-        studentService.updateStudent(id, NAME, student);
+        studentService.updateStudent(id, StudentService.UpdateField.NAME, student.getName());
     }
 
     @DeleteMapping("/{id}")
     public void deleteStudent(@PathVariable String id){
-        studentService.deleteById(id);
+        studentService.deleteStudent(id);
     }
 }

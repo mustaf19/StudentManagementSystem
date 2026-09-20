@@ -1,185 +1,185 @@
-import java.util.List;
-import services.StudentService;
-import services.StudentFileService;
-import services.JdbcStudentRepository;
-import objects.Student;
-import java.util.Scanner;
-import java.util.UUID;
-import java.time.LocalDate;
-import exceptions.ValidationException;
-import exceptions.StudentNotFoundException;
-import exceptions.RepositoryException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-// import com.fasterxml.jackson.databind.ObjectMapper;
-// import com.fasterxml.jackson.core.JsonProcessingException;
+// import java.util.List;
+// import com.services.StudentService;
+// import com.services.StudentFileService;
+// import com.services.JdbcStudentRepository;
+// import com.objects.Student;
+// import java.util.Scanner;
+// import java.util.UUID;
+// import java.time.LocalDate;
+// import com.exceptions.ValidationException;
+// import com.exceptions.StudentNotFoundException;
+// import com.exceptions.RepositoryException;
+// import java.sql.Connection;
+// import java.sql.DriverManager;
+// // import com.fasterxml.jackson.databind.ObjectMapper;
+// // import com.fasterxml.jackson.core.JsonProcessingException;
 
 
-public class Main{
+// public class Main{
 
-    private static void showMenu(){
-        System.out.println("1. add\n2. delete\n3.update\n4.get Students\n and above exit");
+//     private static void showMenu(){
+//         System.out.println("1. add\n2. delete\n3.update\n4.get Students\n and above exit");
 
-    }
+//     }
 
-    private static void addStudent(Scanner scanner, StudentService service){
-        System.out.print("Enter name: ");
-        String name = scanner.nextLine();
-        // Random random = new Random();
-        String uuid = UUID.randomUUID().toString();
+//     private static void addStudent(Scanner scanner, StudentService service){
+//         System.out.print("Enter name: ");
+//         String name = scanner.nextLine();
+//         // Random random = new Random();
+//         String uuid = UUID.randomUUID().toString();
 
-        System.out.print("Enter email: ");
-        String email = scanner.nextLine();
+//         System.out.print("Enter email: ");
+//         String email = scanner.nextLine();
 
-        System.out.print("Enter phone: ");
-        String number = scanner.nextLine();
+//         System.out.print("Enter phone: ");
+//         String number = scanner.nextLine();
 
-        try{
-            service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", LocalDate.parse("1992-03-03")));
-            System.out.println("Student added successfully!");
-        }
-        catch(ValidationException e){
-            System.out.println("e message " +e.getMessage());
-        }
-        catch(RepositoryException e){
-            System.out.println("e message " +e.getMessage());
-        }
-    }
+//         try{
+//             service.addStudent(new Student(uuid,name,email, "789 Oak St, Anothertown, USA", number, "C+", LocalDate.parse("1992-03-03")));
+//             System.out.println("Student added successfully!");
+//         }
+//         catch(ValidationException e){
+//             System.out.println("e message " +e.getMessage());
+//         }
+//         catch(RepositoryException e){
+//             System.out.println("e message " +e.getMessage());
+//         }
+//     }
 
-    private static void deleteStudent(Scanner scanner, StudentService service){
-        String id = scanner.nextLine();
-        try{
-            service.deleteStudent(id);
-            System.out.println("Student deleted successfully!");
-        }
-        catch(StudentNotFoundException e){
-            System.out.println(e.getMessage());
-        }
-        catch(RepositoryException e){
-             System.out.println(e.getMessage());
-        }
-    }
+//     private static void deleteStudent(Scanner scanner, StudentService service){
+//         String id = scanner.nextLine();
+//         try{
+//             service.deleteStudent(id);
+//             System.out.println("Student deleted successfully!");
+//         }
+//         catch(StudentNotFoundException e){
+//             System.out.println(e.getMessage());
+//         }
+//         catch(RepositoryException e){
+//              System.out.println(e.getMessage());
+//         }
+//     }
 
-    private static void updateStudent(Scanner scanner, StudentService service){
+//     private static void updateStudent(Scanner scanner, StudentService service){
 
-        System.out.println("Enter id of student to be updated");
-        String id = scanner.nextLine();
+//         System.out.println("Enter id of student to be updated");
+//         String id = scanner.nextLine();
 
 
-        try{
-            // System.out.println("Current name: " + student.getName());
-            System.out.println("Enter name to be changed");
-            String name = scanner.nextLine();
-            service.updateStudent(id, StudentService.UpdateField.NAME, name);
-            System.out.println("Student is updated!");
-        }
-        catch(StudentNotFoundException e){
-            System.out.println("e message " +e.getMessage());
-        }
-        catch(ValidationException e){
-            System.out.println("e message " +e.getMessage());
-        }
-        catch(RepositoryException e){
-            System.out.println("e message " +e.getMessage());
-        }
+//         try{
+//             // System.out.println("Current name: " + student.getName());
+//             System.out.println("Enter name to be changed");
+//             String name = scanner.nextLine();
+//             service.updateStudent(id, StudentService.UpdateField.NAME, name);
+//             System.out.println("Student is updated!");
+//         }
+//         catch(StudentNotFoundException e){
+//             System.out.println("e message " +e.getMessage());
+//         }
+//         catch(ValidationException e){
+//             System.out.println("e message " +e.getMessage());
+//         }
+//         catch(RepositoryException e){
+//             System.out.println("e message " +e.getMessage());
+//         }
 
         
-    }
+//     }
 
-    private static void showStudents(StudentService service){
-        List<Student> students = service.getStudentsList();
-        if(students.isEmpty()){
-            System.out.println("No records found!");
-            return;
-        }
-        for(Student student: students){
-            System.out.println(student);
-        }
-    }
+//     private static void showStudents(StudentService service){
+//         List<Student> students = service.getStudentsList();
+//         if(students.isEmpty()){
+//             System.out.println("No records found!");
+//             return;
+//         }
+//         for(Student student: students){
+//             System.out.println(student);
+//         }
+//     }
 
-    // private static void searchStudent(Scanner scanner, StudentService service){
-    //     System.out.println("Enter id of the student");
-    //     String id = scanner.nextLine();
-    //     Studnet searchedStudent = service.searchStudentById(id);
-    //     if(searchedStudent!=null)
-    //         System.out.println(searchedStudent.toString());
-    //     else System.out.println("No student found with this id");
-    // }
+//     // private static void searchStudent(Scanner scanner, StudentService service){
+//     //     System.out.println("Enter id of the student");
+//     //     String id = scanner.nextLine();
+//     //     Studnet searchedStudent = service.searchStudentById(id);
+//     //     if(searchedStudent!=null)
+//     //         System.out.println(searchedStudent.toString());
+//     //     else System.out.println("No student found with this id");
+//     // }
 
-    private static void searchStudent(Scanner scanner, StudentService service){
-        System.out.println("Enter id of the student");
-        String id = scanner.nextLine();
-        Student searchedStudent=null;
-        try{
-            searchedStudent = service.searchStudentById(id);
-        }
-        catch(StudentNotFoundException e){
-            System.out.println("e message " +e.getMessage());
-        }
-        if(searchedStudent!=null){
-            System.out.println("Student is :"+ searchedStudent.toString());
-        }
-    }
+//     private static void searchStudent(Scanner scanner, StudentService service){
+//         System.out.println("Enter id of the student");
+//         String id = scanner.nextLine();
+//         Student searchedStudent=null;
+//         try{
+//             searchedStudent = service.searchStudentById(id);
+//         }
+//         catch(StudentNotFoundException e){
+//             System.out.println("e message " +e.getMessage());
+//         }
+//         if(searchedStudent!=null){
+//             System.out.println("Student is :"+ searchedStudent.toString());
+//         }
+//     }
 
-    public static void main(String[] args){
-        Scanner scanner = new Scanner(System.in);
-        Connection connection;
-        try{
-            connection = DriverManager.getConnection("jdbc:sqlite:students.db");
-        }
-        catch(Exception e){
-            System.out.println("DriverManager exception occured! ->"+ e.getMessage());
-            return;
-        }
-        // StudentService studentService = new StudentService(new StudentFileService());
-        StudentService studentService = new StudentService(new JdbcStudentRepository(connection));
+//     public static void main(String[] args){
+//         Scanner scanner = new Scanner(System.in);
+//         Connection connection;
+//         try{
+//             connection = DriverManager.getConnection("jdbc:sqlite:students.db");
+//         }
+//         catch(Exception e){
+//             System.out.println("DriverManager exception occured! ->"+ e.getMessage());
+//             return;
+//         }
+//         // StudentService studentService = new StudentService(new StudentFileService());
+//         StudentService studentService = new StudentService(new JdbcStudentRepository(connection));
 
-        // studentService.addStudent(new Student("1", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
-        // studentService.addStudent(new Student("2", "Jane Smith", "jane.smith@example.com", "456 Elm St, Othertown, USA", "0987654321", "B-", "1991-02-02"));
-        // studentService.addStudent(new Student("3", "Jim Beam", "jim.beam@example.com", "789 Oak St, Anothertown, USA", "3456789012", "C+", "1992-03-03"));
+//         // studentService.addStudent(new Student("1", "John Doe", "john.doe@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", "1990-01-01"));
+//         // studentService.addStudent(new Student("2", "Jane Smith", "jane.smith@example.com", "456 Elm St, Othertown, USA", "0987654321", "B-", "1991-02-02"));
+//         // studentService.addStudent(new Student("3", "Jim Beam", "jim.beam@example.com", "789 Oak St, Anothertown, USA", "3456789012", "C+", "1992-03-03"));
 
-        while(true){
-            // this.showMenu(); (this is used for objects and static class dont require this, as they dont have objects)
-            showMenu();
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+//         while(true){
+//             // this.showMenu(); (this is used for objects and static class dont require this, as they dont have objects)
+//             showMenu();
+//             int choice = scanner.nextInt();
+//             scanner.nextLine();
 
-            switch(choice){
-                case 1: addStudent(scanner, studentService); break;
-                case 2: deleteStudent(scanner, studentService); break;
-                case 3: updateStudent(scanner, studentService); break;
-                case 4: showStudents(studentService); break;
-                default: break;
-            }
-            if(choice==0){
-                break;
-            }
-        }
+//             switch(choice){
+//                 case 1: addStudent(scanner, studentService); break;
+//                 case 2: deleteStudent(scanner, studentService); break;
+//                 case 3: updateStudent(scanner, studentService); break;
+//                 case 4: showStudents(studentService); break;
+//                 default: break;
+//             }
+//             if(choice==0){
+//                 break;
+//             }
+//         }
 
 
-        // System.out.println("Hello World, application started");
-        // StudentService studentService = new StudentService(new StudentFileService());
+//         // System.out.println("Hello World, application started");
+//         // StudentService studentService = new StudentService(new StudentFileService());
 
-        // List<Student> students = studentService.getStudentsList();
+//         // List<Student> students = studentService.getStudentsList();
 
-        // for(Student student : students){
-        //     System.out.println(student.toString());
-        // }
+//         // for(Student student : students){
+//         //     System.out.println(student.toString());
+//         // }
 
-        // boolean isDeleted = studentService.deleteStudent("2");
-        // if(isDeleted){
-        //     System.out.println("Student 2 deleted successfully");
-        // }else{
-        //     System.out.println("Student 2 not found");
-        // }
+//         // boolean isDeleted = studentService.deleteStudent("2");
+//         // if(isDeleted){
+//         //     System.out.println("Student 2 deleted successfully");
+//         // }else{
+//         //     System.out.println("Student 2 not found");
+//         // }
 
-        // for(Student student : students){
-        //     System.out.println(student.toString());
-        // }
+//         // for(Student student : students){
+//         //     System.out.println(student.toString());
+//         // }
 
-        // studentService.updateStudent("3", "Name", "Jimmy");
+//         // studentService.updateStudent("3", "Name", "Jimmy");
 
-        scanner.close();
+//         scanner.close();
     
-    }
-}
+//     }
+// }

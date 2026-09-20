@@ -1,9 +1,9 @@
-package services;
+package com.services;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
-import objects.Student;
+import com.objects.Student;
 
 public class InMemoryStudentRepository implements StudentRepository {
 

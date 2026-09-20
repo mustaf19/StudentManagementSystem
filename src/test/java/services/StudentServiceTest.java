@@ -1,15 +1,15 @@
-package services;
+package com.services;
 
 import org.junit.jupiter.api.Test;
-import objects.Student;
+import com.objects.Student;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
 import static org.mockito.Mockito.*;
-import exceptions.ValidationException;
-import exceptions.StudentNotFoundException;
-import exceptions.RepositoryException;
+import com.exceptions.ValidationException;
+import com.exceptions.StudentNotFoundException;
+import com.exceptions.RepositoryException;
 
 class StudentServiceTest {
 

@@ -1,8 +1,8 @@
-package services;
+package com.services;
 
 import java.util.List;
 import java.util.Optional;
-import objects.Student;
+import com.objects.Student;
 import java.io.FileWriter;
 import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.FileReader;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
-import exceptions.StudentNotFoundException;
+import com.exceptions.StudentNotFoundException;
 
 public class StudentFileService implements StudentRepository{
 

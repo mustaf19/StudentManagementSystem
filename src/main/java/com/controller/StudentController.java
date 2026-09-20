@@ -1,14 +1,16 @@
+package com.controller;
+
 import java.util.List;
-import services.StudentService;
-import services.StudentFileService;
-import services.JdbcStudentRepository;
-import objects.Student;
+import com.services.StudentService;
+import com.services.StudentFileService;
+import com.services.JdbcStudentRepository;
+import com.objects.Student;
 import java.util.Scanner;
 import java.util.UUID;
 import java.time.LocalDate;
-import exceptions.ValidationException;
-import exceptions.StudentNotFoundException;
-import exceptions.RepositoryException;
+import com.exceptions.ValidationException;
+import com.exceptions.StudentNotFoundException;
+import com.exceptions.RepositoryException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 

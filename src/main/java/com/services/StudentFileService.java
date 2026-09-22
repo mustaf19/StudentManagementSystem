@@ -2,6 +2,7 @@ package com.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Iterator;
 import com.objects.Student;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -112,25 +113,17 @@ public class StudentFileService implements StudentRepository{
     public void deleteById(String id){
         List<Student> retStudent = readStudentsFromFile();
 
-        for(Student x: retStudent){
-            if(x.getId().equals(id)){
-                retStudent.remove(x); break;
+        Iterator<Student> iterator = retStudent.iterator();
+
+        while (iterator.hasNext()) {
+            Student student = iterator.next();
+
+            if (student.getId() == id) {
+                iterator.remove();
             }
         }
 
         this.writeAll(retStudent);
-
-        // try{    
-        //     String json = mapper.writeValueAsString(retStudent);
-        //     try(FileWriter writer = new FileWriter(filePath)){
-        //         System.out.println(json);
-        //         writer.write(json);
-        //     }
-        //     catch(IOException e){ e.printStackTrace();}
-        // }
-        // catch(JsonProcessingException e){
-        //     e.printStackTrace();
-        // }
     }
 
     @Override

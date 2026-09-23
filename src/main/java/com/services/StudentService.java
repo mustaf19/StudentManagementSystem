@@ -77,7 +77,7 @@ public class StudentService{
             this.sri.deleteById(id);
         }
         catch(Exception e){
-            new StudentNotFoundException("Student with id "+id+ " not found.");
+            throw new StudentNotFoundException("Student with id "+id+ " not found.");
         }
     }
 

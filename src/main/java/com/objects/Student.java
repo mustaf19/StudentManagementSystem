@@ -2,6 +2,9 @@ package com.objects;
 
 import java.time.LocalDate;
 
+import jakarta.validation.Valid;
+
+@Valid 
 public class Student{
     private String id;
     private String name;

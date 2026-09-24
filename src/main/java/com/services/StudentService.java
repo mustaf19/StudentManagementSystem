@@ -71,13 +71,13 @@ public class StudentService{
 
 
     public void deleteStudent(String id){
-        Student studentTobeDeleted = this.searchStudentById(id);
+        // Student studentTobeDeleted = this.searchStudentById(id);
 
         try{
             this.sri.deleteById(id);
         }
         catch(Exception e){
-            throw new StudentNotFoundException("Student with id "+id+ " not found.");
+            throw new RepositoryException("Student with id "+id+ " not found.", e);
         }
     }
 

@@ -2,17 +2,7 @@ package com.controller;
 
 import java.util.List;
 import com.services.StudentService;
-import com.services.StudentFileService;
-import com.services.JdbcStudentRepository;
 import com.objects.Student;
-import java.util.Scanner;
-import java.util.UUID;
-import java.time.LocalDate;
-import com.exceptions.ValidationException;
-import com.exceptions.StudentNotFoundException;
-import com.exceptions.RepositoryException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;

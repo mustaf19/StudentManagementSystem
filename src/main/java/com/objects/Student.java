@@ -2,7 +2,9 @@ package com.objects;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 public class Student{
     private String id;
@@ -15,7 +17,7 @@ public class Student{
 
     public Student(){}
     
-    public Student(@NotBlank String id, String name, String email, String address, String phoneNo, String bloodGroup, LocalDate dob){
+    public Student(@NotBlank String id, String name, @Email String email, String address, String phoneNo, String bloodGroup, LocalDate dob){
         this.id = id;
         this.name = name;
         this.email = email;

@@ -118,7 +118,7 @@ public class StudentFileService implements StudentRepository{
         while (iterator.hasNext()) {
             Student student = iterator.next();
 
-            if (student.getId() == id) {
+            if (student.getId().equals(id)) {
                 iterator.remove();
             }
         }

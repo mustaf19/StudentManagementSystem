@@ -14,12 +14,13 @@ public class InMemoryStudentRepository implements StudentRepository {
     }
 
     public Optional<Student> findById(String id){
-        for(Student x: students){
-            if(x.getId().equals(id)){
-                return Optional.of(x);
-            }
-        }
-        return Optional.empty();
+        // for(Student x: students){
+        //     if(x.getId().equals(id)){
+        //         return Optional.of(x);
+        //     }
+        // }
+        // return Optional.empty();
+        return students.stream().filter(x->x.getId().equals(id)).findFirst();
     }
 
     public void deleteById(String id){

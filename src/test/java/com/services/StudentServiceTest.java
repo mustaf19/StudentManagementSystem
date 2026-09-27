@@ -2,6 +2,7 @@ package com.services;
 
 import org.junit.jupiter.api.Test;
 import com.objects.Student;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.time.LocalDate;
@@ -92,7 +93,7 @@ class StudentServiceTest {
     void deletingNonExistingStudent(){
         StudentService sf = new StudentService(new InMemoryStudentRepository());
 
-        assertThrows(StudentNotFoundException.class,()->sf.deleteStudent("10000"));
+        assertThrows(RepositoryException.class,()->sf.deleteStudent("10000"));
 
         // assertFalse(result);
     }

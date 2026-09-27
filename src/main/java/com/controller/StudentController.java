@@ -2,6 +2,9 @@ package com.controller;
 
 import java.util.List;
 import com.services.StudentService;
+import com.dto.CreateStudentRequest;
+import com.dto.StudentMapper;
+import com.dto.StudentResponse;
 import com.objects.Student;
 
 import jakarta.validation.Valid;
@@ -23,13 +26,13 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public Student getStudent(@PathVariable String id){
-        return studentService.searchStudentById(id);
+    public StudentResponse getStudent(@PathVariable String id){
+        return StudentMapper.toResponse(studentService.searchStudentById(id));
     }
 
     @PostMapping
-    public void addStudent(@Valid @RequestBody Student student){
-        studentService.addStudent(student);
+    public void addStudent(@Valid @RequestBody CreateStudentRequest req){
+        studentService.addStudent(StudentMapper.toStudent(req));
     }
 
     @PutMapping("/{id}")

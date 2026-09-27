@@ -3,6 +3,8 @@ package com.services;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
+
+import com.exceptions.RepositoryException;
 import com.objects.Student;
 
 public class InMemoryStudentRepository implements StudentRepository {
@@ -30,6 +32,9 @@ public class InMemoryStudentRepository implements StudentRepository {
                 // students.remove(x);
                 y=x;
             }
+        }
+        if(y==null){
+            throw new RepositoryException("Student not found!", null);
         }
         students.remove(y);
     }

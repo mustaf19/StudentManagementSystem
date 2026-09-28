@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import static org.mockito.Mockito.*;
 import com.exceptions.ValidationException;
 import com.exceptions.StudentNotFoundException;
+import com.dto.UpdateStudentRequest;
 import com.exceptions.RepositoryException;
 
 class StudentServiceTest {
@@ -152,6 +153,19 @@ class StudentServiceTest {
         // assertFalse(rs);
     }
 
+    @Test
+    void updateEmailAndPhoneNo(){
+        StudentService sf = new StudentService(new InMemoryStudentRepository());
+        sf.addStudent(new Student("TEST01", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
+
+        sf.updateStudent("TEST01", new Student("TEST01","JOhn Eng", "john.engChanged@example.com", "123 Main St, Anytown, USA", "123407890", "A+", LocalDate.parse("1990-01-01")));
+
+        Student updatedStudent = sf.searchStudentById("TEST01");
+        assertEquals("john.engChanged@example.com", updatedStudent.getEmail());
+        assertEquals("123407890", updatedStudent.getPhoneNo());
+
+        // assertFalse(rs);
+    }
 
     @Test
     void checkCorrectEmail(){

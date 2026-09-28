@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 import com.exceptions.ValidationException;
 import com.exceptions.StudentNotFoundException;
+import com.dto.UpdateStudentRequest;
 import com.exceptions.RepositoryException;
 
 // import org.springframework.web.bind.annotation.*;
@@ -107,6 +108,52 @@ public class StudentService{
             case DOB: studentToBeUpdated.setDob(LocalDate.parse(updatedValue)); break;
             default: throw new ValidationException("Unknown field: " + paramater);
         }
+        try{
+            this.sri.update(studentToBeUpdated);
+        }
+        catch(Exception e){
+            throw new RepositoryException("Not updated!", e);
+        }
+
+    }
+
+
+    public void updateStudent(String id, Student updatedStudent){
+        this.checkEmail(updatedStudent.getEmail());
+        this.checkPhone(updatedStudent.getPhoneNo());
+        Student studentToBeUpdated = this.searchStudentById(id);
+        studentToBeUpdated.setName(updatedStudent.getName());
+        studentToBeUpdated.setAddress(updatedStudent.getAddress());
+        studentToBeUpdated.setPhoneNo(updatedStudent.getPhoneNo());
+        studentToBeUpdated.setBloodGroup(updatedStudent.getBloodGroup());
+        studentToBeUpdated.setEmail(updatedStudent.getEmail()); 
+        studentToBeUpdated.setDob(updatedStudent.getDob());
+
+        // // if(studentToBeUpdated==null){
+        // //     throw new StudentNotFoundException("Student not found!");
+        // // }
+        // if( updatedValue==null || paramater ==null){
+        //     throw new ValidationException("Invalid item");
+        // }
+
+
+        // switch(paramater){
+        //     case NAME: studentToBeUpdated.setName(updatedValue); break;
+        //     case ADDRESS: 
+        //         studentToBeUpdated.setAddress(updatedValue); break;
+        //     case PHONENO: 
+        //         this.checkPhone(updatedValue);
+        //         studentToBeUpdated.setPhoneNo(updatedValue);
+        //         break;
+        //     case EMAIL: 
+        //         this.checkEmail(updatedValue);
+        //         studentToBeUpdated.setEmail(updatedValue); 
+        //         break;
+        //     case DOB: studentToBeUpdated.setDob(LocalDate.parse(updatedValue)); break;
+        //     default: throw new ValidationException("Unknown field: " + paramater);
+        // }
+
+
         try{
             this.sri.update(studentToBeUpdated);
         }

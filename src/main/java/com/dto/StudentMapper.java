@@ -17,6 +17,17 @@ public class StudentMapper {
         return student;
     }
 
+    public static Student toStudent(UpdateStudentRequest req){
+        Student student = new Student();
+        student.setName(req.getName());
+        student.setEmail(req.getEmail());
+        student.setPhoneNo(req.getPhoneNo());
+        student.setAddress(req.getAddress());
+        student.setBloodGroup(req.getBloodGroup());
+        student.setDob(req.getDob());
+        return student;
+    }
+
     public static StudentResponse toResponse(Student student){
         StudentResponse response = new StudentResponse();
         response.setId(student.getId());

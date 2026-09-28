@@ -5,6 +5,7 @@ import com.services.StudentService;
 import com.dto.CreateStudentRequest;
 import com.dto.StudentMapper;
 import com.dto.StudentResponse;
+import com.dto.UpdateStudentRequest;
 import com.objects.Student;
 
 import jakarta.validation.Valid;
@@ -35,9 +36,14 @@ public class StudentController {
         studentService.addStudent(StudentMapper.toStudent(req));
     }
 
+    // @PutMapping("/{id}")
+    // public void updateStudent(@PathVariable String id, @Valid @RequestBody Student student){
+    //     studentService.updateStudent(id, StudentService.UpdateField.NAME, student.getName());
+    // }
+
     @PutMapping("/{id}")
-    public void updateStudent(@PathVariable String id, @Valid @RequestBody Student student){
-        studentService.updateStudent(id, StudentService.UpdateField.NAME, student.getName());
+    public void updateStudent(@PathVariable String id, @RequestBody @Valid UpdateStudentRequest req){
+        studentService.updateStudent(id, StudentMapper.toStudent(req));
     }
 
     @DeleteMapping("/{id}")

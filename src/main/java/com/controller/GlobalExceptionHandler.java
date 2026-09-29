@@ -1,11 +1,11 @@
 package com.controller;
 
+import com.dto.ErrorResponse;
 import com.exceptions.RepositoryException;
 import com.exceptions.StudentNotFoundException;
 import com.exceptions.ValidationException;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,25 +15,27 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler{
 
     @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<String> handle(StudentNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handle(StudentNotFoundException ex) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(ex.getMessage());
+                    .body(new ErrorResponse(ex.getMessage(), "STUDENT_NOT_FOUND"));
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<String> handle(ValidationException ex){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    public ResponseEntity<ErrorResponse> handle(ValidationException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage(), ex.getCode()));
     }
 
     @ExceptionHandler(RepositoryException.class)
-    public ResponseEntity<String> handle(RepositoryException ex){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    public ResponseEntity<ErrorResponse> handle(RepositoryException ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(ex.getMessage(), "REPOSITORY_ERROR"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handle(MethodArgumentNotValidException ex){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage(), "VALIDATION_ERROR"));
     }
 
 }

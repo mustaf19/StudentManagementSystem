@@ -30,13 +30,13 @@ public class StudentService{
 
     public void checkEmail(String email){
         if(email== null || email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") == false){
-            throw new ValidationException("Invalid Email");
+            throw new ValidationException("Invalid Email", "INVALID_EMAIL");
         }
     }
 
     public void checkPhone(String phoneNo){
         if(phoneNo!= null && phoneNo.matches("\\d{10}$") == false){
-            throw new ValidationException("Invalid Phoneno");
+            throw new ValidationException("Invalid Phoneno", "INVALID_PHONENO");
         }
     }
 

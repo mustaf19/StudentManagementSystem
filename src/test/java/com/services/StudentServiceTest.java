@@ -158,11 +158,11 @@ class StudentServiceTest {
         StudentService sf = new StudentService(new InMemoryStudentRepository());
         sf.addStudent(new Student("TEST01", "JOhn Eng", "john.eng@example.com", "123 Main St, Anytown, USA", "1234567890", "A+", LocalDate.parse("1990-01-01")));
 
-        sf.updateStudent("TEST01", new Student("TEST01","JOhn Eng", "john.engChanged@example.com", "123 Main St, Anytown, USA", "123407890", "A+", LocalDate.parse("1990-01-01")));
+        sf.updateStudent("TEST01", new Student("TEST01","JOhn Eng", "john.engChanged@example.com", "123 Main St, Anytown, USA", "9123407890", "A+", LocalDate.parse("1990-01-01")));
 
         Student updatedStudent = sf.searchStudentById("TEST01");
         assertEquals("john.engChanged@example.com", updatedStudent.getEmail());
-        assertEquals("123407890", updatedStudent.getPhoneNo());
+        assertEquals("9123407890", updatedStudent.getPhoneNo());
 
         // assertFalse(rs);
     }

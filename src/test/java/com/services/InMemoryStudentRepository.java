@@ -34,7 +34,7 @@ public class InMemoryStudentRepository implements StudentRepository {
             }
         }
         if(y==null){
-            throw new RepositoryException("Student not found!", null);
+            throw new RepositoryException("Student not found!", "NOt_FOUND");
         }
         students.remove(y);
     }

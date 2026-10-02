@@ -69,16 +69,6 @@ public class StudentControllerTest {
 
         @Test
         void postInvalidBodyReturns400() throws Exception {
-                Student student = new Student(
-                                "099",
-                                "John Doe",
-                                "john.doe@example.com",
-                                "123 Main St",
-                                "",
-                                "A+",
-                                LocalDate.parse("1990-01-01"));
-                // when(studentService.searchStudentById("099")).thenThrow(new
-                // StudentNotFoundException("Student_NOT_FOUND"));
 
                 mockMvc.perform(post("/students")
                                 .contentType(MediaType.APPLICATION_JSON)

@@ -51,14 +51,7 @@ public class StudentControllerTest {
 
         @Test
         void getUnknownStudentIdReturns404() throws Exception {
-                Student student = new Student(
-                                "099",
-                                "John Doe",
-                                "john.doe@example.com",
-                                "123 Main St",
-                                "9876543211",
-                                "A+",
-                                LocalDate.parse("1990-01-01"));
+              
                 when(studentService.searchStudentById("099"))
                                 .thenThrow(new StudentNotFoundException("Student_NOT_FOUND"));
 

@@ -1,7 +1,6 @@
 package com.services;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
 import org.springframework.stereotype.Repository;
+import org.slf4j.LoggerFactory;
 
 import com.exceptions.RepositoryException;
 import com.objects.Student;
@@ -19,12 +22,12 @@ import com.objects.Student;
 @Repository
 public class JdbcStudentRepository implements StudentRepository {
 
-    public JdbcStudentRepository() {
-        createTableIfNotExist();
-    }
+    private final DataSource dataSource;
+    private final static Logger logger = LoggerFactory.getLogger(JdbcStudentRepository.class);
 
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:sqlite:student.db");
+    public JdbcStudentRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+        createTableIfNotExist();
     }
 
     private void createTableIfNotExist() {
@@ -38,12 +41,13 @@ public class JdbcStudentRepository implements StudentRepository {
             + "dob TEXT"
             + ")";
 
-        try (Connection connection = getConnection();
+        try (Connection connection = dataSource.getConnection();
              Statement stmt = connection.createStatement()) {
 
             stmt.execute(sql);
 
         } catch (SQLException e) {
+
             throw new RepositoryException(
                 "Could not create students table", e
             );
@@ -57,7 +61,7 @@ public class JdbcStudentRepository implements StudentRepository {
             "(id, name, email, address, phone_no, blood_group, dob) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             bindStudent(ps, student, false);
@@ -74,7 +78,7 @@ public class JdbcStudentRepository implements StudentRepository {
     public Optional<Student> findById(String id) {
         String sql = "SELECT * FROM students WHERE id=?";
 
-        try (Connection connection = getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, id);
@@ -98,7 +102,7 @@ public class JdbcStudentRepository implements StudentRepository {
     public void deleteById(String id) {
         String sql = "DELETE FROM students WHERE id=?";
 
-        try (Connection connection = getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, id);
@@ -119,7 +123,7 @@ public class JdbcStudentRepository implements StudentRepository {
             "blood_group=?, dob=? " +
             "WHERE id=?";
 
-        try (Connection connection = getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
             bindStudent(ps, student, true);
@@ -137,7 +141,7 @@ public class JdbcStudentRepository implements StudentRepository {
         String sql = "SELECT * FROM students";
         List<Student> students = new ArrayList<>();
 
-        try (Connection connection = getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 

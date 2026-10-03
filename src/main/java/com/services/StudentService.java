@@ -2,6 +2,9 @@ package com.services;
 
 import java.util.List;
 import com.objects.Student;
+
+import jakarta.transaction.Transactional;
+
 import java.util.Collections;
 import java.time.LocalDate;
 // import com.services.StudentRepository;
@@ -39,6 +42,7 @@ public class StudentService{
         }
     }
 
+    @Transactional 
     public void addStudent(Student student){
         this.checkEmail(student.getEmail());
         this.checkPhone(student.getPhoneNo());
@@ -69,7 +73,7 @@ public class StudentService{
         // }
     }
 
-
+    @Transactional 
     public void deleteStudent(String id){
         // Student studentTobeDeleted = this.searchStudentById(id);
 
@@ -81,6 +85,7 @@ public class StudentService{
         }
     }
 
+    @Transactional 
     public void updateStudent(String id, UpdateField paramater, String updatedValue){
         Student studentToBeUpdated = this.searchStudentById(id);
 
@@ -116,7 +121,7 @@ public class StudentService{
 
     }
 
-
+    @Transactional 
     public void updateStudent(String id, Student updatedStudent){
         this.checkEmail(updatedStudent.getEmail());
         this.checkPhone(updatedStudent.getPhoneNo());

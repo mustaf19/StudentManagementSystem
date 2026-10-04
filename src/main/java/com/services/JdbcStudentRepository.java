@@ -32,45 +32,43 @@ public class JdbcStudentRepository implements StudentRepository {
 
     private void createTableIfNotExist() {
         String sql = "CREATE TABLE IF NOT EXISTS students ("
-            + "id TEXT PRIMARY KEY,"
-            + "name TEXT,"
-            + "email TEXT,"
-            + "address TEXT,"
-            + "phone_no TEXT,"
-            + "blood_group TEXT,"
-            + "dob TEXT"
-            + ")";
+                + "id TEXT PRIMARY KEY,"
+                + "name TEXT,"
+                + "email TEXT,"
+                + "address TEXT,"
+                + "phone_no TEXT,"
+                + "blood_group TEXT,"
+                + "dob TEXT"
+                + ")";
 
         try (Connection connection = dataSource.getConnection();
-             Statement stmt = connection.createStatement()) {
+                Statement stmt = connection.createStatement()) {
 
             stmt.execute(sql);
 
         } catch (SQLException e) {
-
+            logger.error("Student table not created!");
             throw new RepositoryException(
-                "Could not create students table", e
-            );
+                    "Could not create students table", e);
         }
     }
 
     @Override
     public void save(Student student) {
-        String sql =
-            "INSERT INTO students " +
-            "(id, name, email, address, phone_no, blood_group, dob) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO students " +
+                "(id, name, email, address, phone_no, blood_group, dob) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+                PreparedStatement ps = connection.prepareStatement(sql)) {
 
             bindStudent(ps, student, false);
             ps.executeUpdate();
 
         } catch (SQLException e) {
+            logger.error("Student didn't save in DB.");
             throw new RepositoryException(
-                "Student didn't save!", e
-            );
+                    "Student didn't save!", e);
         }
     }
 
@@ -79,7 +77,7 @@ public class JdbcStudentRepository implements StudentRepository {
         String sql = "SELECT * FROM students WHERE id=?";
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+                PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, id);
 
@@ -92,9 +90,9 @@ public class JdbcStudentRepository implements StudentRepository {
             }
 
         } catch (SQLException e) {
+            logger.error("Student was not found.");
             throw new RepositoryException(
-                "Student could not be found! " + id, e
-            );
+                    "Student could not be found! " + id, e);
         }
     }
 
@@ -103,36 +101,35 @@ public class JdbcStudentRepository implements StudentRepository {
         String sql = "DELETE FROM students WHERE id=?";
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+                PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, id);
             ps.executeUpdate();
 
         } catch (SQLException e) {
+            logger.error("Delete operation failed");
             throw new RepositoryException(
-                "Delete operation didn't perform at id: " + id, e
-            );
+                    "Delete operation didn't perform at id: " + id, e);
         }
     }
 
     @Override
     public void update(Student student) {
-        String sql =
-            "UPDATE students SET " +
-            "name=?, email=?, address=?, phone_no=?, " +
-            "blood_group=?, dob=? " +
-            "WHERE id=?";
+        String sql = "UPDATE students SET " +
+                "name=?, email=?, address=?, phone_no=?, " +
+                "blood_group=?, dob=? " +
+                "WHERE id=?";
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+                PreparedStatement ps = connection.prepareStatement(sql)) {
 
             bindStudent(ps, student, true);
             ps.executeUpdate();
 
         } catch (SQLException e) {
+            logger.error("Student not updated");
             throw new RepositoryException(
-                "Could not update student " + student.getId(), e
-            );
+                    "Could not update student " + student.getId(), e);
         }
     }
 
@@ -142,8 +139,8 @@ public class JdbcStudentRepository implements StudentRepository {
         List<Student> students = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 students.add(mapRowToStudent(rs));
@@ -152,17 +149,61 @@ public class JdbcStudentRepository implements StudentRepository {
             return students;
 
         } catch (SQLException e) {
+            logger.warn("No Student FOUND!");
             throw new RepositoryException(
-                "Students could not be found!", e
-            );
+                    "Students could not be found!", e);
         }
     }
 
+    @Override
+    public List<Student> findPage(int offset, int limit) {
+
+        List<Student> studentList = new ArrayList<>();
+
+        String sql = "SELECT * FROM students limit ? OFFSET ?";
+
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setLong(1, limit);
+            ps.setLong(2, offset);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                studentList.add(mapRowToStudent(rs));
+            }
+            return studentList;
+
+        } catch (SQLException e) {
+            logger.warn("Student not found");
+            throw new RepositoryException(
+                    "Could not find student", sql);
+        }
+
+    }
+
+    @Override
+	public 
+    long count(){
+        String sql = "SELECT COUNT(*) FROM students";
+        long count=0;
+
+        try(Connection connection = dataSource.getConnection();
+        PreparedStatement ps = connection.prepareStatement(sql)){
+            ResultSet rs = ps.executeQuery();
+            count = rs.getLong(1);
+        }
+        catch(Exception ex){
+            logger.error("Not able to count");
+            throw new RepositoryException("Not able to count", sql);
+        }        
+        return count;
+    }
+
     private void bindStudent(
-        PreparedStatement ps,
-        Student student,
-        boolean update
-    ) throws SQLException {
+            PreparedStatement ps,
+            Student student,
+            boolean update) throws SQLException {
 
         if (update) {
             ps.setString(1, student.getName());
@@ -190,19 +231,17 @@ public class JdbcStudentRepository implements StudentRepository {
     private Student mapRowToStudent(ResultSet rs) throws SQLException {
         String dobText = rs.getString("dob");
 
-        LocalDate dob =
-            (dobText == null || dobText.isBlank())
+        LocalDate dob = (dobText == null || dobText.isBlank())
                 ? null
                 : LocalDate.parse(dobText);
 
         return new Student(
-            rs.getString("id"),
-            rs.getString("name"),
-            rs.getString("email"),
-            rs.getString("address"),
-            rs.getString("phone_no"),
-            rs.getString("blood_group"),
-            dob
-        );
+                rs.getString("id"),
+                rs.getString("name"),
+                rs.getString("email"),
+                rs.getString("address"),
+                rs.getString("phone_no"),
+                rs.getString("blood_group"),
+                dob);
     }
 }

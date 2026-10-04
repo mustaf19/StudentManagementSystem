@@ -2,6 +2,11 @@ package com.services;
 
 import java.util.List;
 import java.util.Optional;
+
+// import org.hibernate.validator.internal.util.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Iterator;
 import com.objects.Student;
 import java.io.FileWriter;
@@ -13,69 +18,71 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.ArrayList;
 import com.exceptions.StudentNotFoundException;
 
-public class StudentFileService implements StudentRepository{
+public class StudentFileService implements StudentRepository {
 
     private static final String filePath = "studentData.json";
     private static final ObjectMapper mapper = new ObjectMapper();
+    private static final Logger logger = LoggerFactory.getLogger(StudentFileService.class);
 
-    private List<Student> readStudentsFromFile(){
+    private List<Student> readStudentsFromFile() {
         FileReader reader = null;
         StringBuilder strBuild = new StringBuilder();
         String json = "";
 
-        try{
+        try {
             reader = new FileReader(filePath);
             int ch = reader.read();
-            while(ch != -1){
-                strBuild.append((char)ch);
+            while (ch != -1) {
+                strBuild.append((char) ch);
                 ch = reader.read();
             }
             json = strBuild.toString();
-            if(json.isBlank()){
+            if (json.isBlank()) {
                 return new ArrayList<>();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
+            logger.error("Not able to read file.");
             e.printStackTrace();
-        }
-        finally{
-            if(reader != null){
-                try{
+        } finally {
+            if (reader != null) {
+                try {
                     reader.close();
-                }
-                catch(IOException e){
-                    
+                } catch (IOException e) {
+
                 }
             }
         }
-        
+
         List<Student> retStudent = new ArrayList<>();
-        try{
-            retStudent = mapper.readValue(json,new TypeReference<List<Student>>() {});
+        try {
+            retStudent = mapper.readValue(json, new TypeReference<List<Student>>() {
+            });
+        } catch (JsonProcessingException e) {
+            logger.error("Unable to read Json.");
+            e.printStackTrace();
         }
-        catch(JsonProcessingException e){e.printStackTrace();}
         // catch(IOException e){e.printStackTrace();}
         return retStudent;
 
     }
 
-
-    private void writeAll(List<Student> studentList){
-        try{
+    private void writeAll(List<Student> studentList) {
+        try {
             String json = mapper.writeValueAsString(studentList);
-            try(FileWriter writer = new FileWriter(filePath)){
+            try (FileWriter writer = new FileWriter(filePath)) {
                 System.out.println(json);
                 writer.write(json);
+            } catch (IOException e) {
+                logger.error("Unable to write in file");
+                e.printStackTrace();
             }
-            catch(IOException e){ e.printStackTrace();}
-        }
-        catch(JsonProcessingException e){
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void save(Student student){
+    public void save(Student student) {
 
         List<Student> studentList = this.readStudentsFromFile();
         studentList.add(student);
@@ -83,25 +90,25 @@ public class StudentFileService implements StudentRepository{
         this.writeAll(studentList);
 
         // try{
-        //     String json = mapper.writeValueAsString(studentList);
-        //     try(FileWriter writer = new FileWriter(filePath)){
-        //         System.out.println(json);
-        //         writer.write(json);
-        //     }
-        //     catch(IOException e){ e.printStackTrace();}
+        // String json = mapper.writeValueAsString(studentList);
+        // try(FileWriter writer = new FileWriter(filePath)){
+        // System.out.println(json);
+        // writer.write(json);
+        // }
+        // catch(IOException e){ e.printStackTrace();}
         // }
         // catch(JsonProcessingException e){
-        //     e.printStackTrace();
+        // e.printStackTrace();
         // }
     }
 
     @Override
-    public Optional<Student> findById(String id){
-        
+    public Optional<Student> findById(String id) {
+
         List<Student> retStudent = readStudentsFromFile();
 
-        for(Student x: retStudent){
-            if(x.getId().equals(id)){
+        for (Student x : retStudent) {
+            if (x.getId().equals(id)) {
                 return Optional.of(x);
             }
         }
@@ -110,7 +117,7 @@ public class StudentFileService implements StudentRepository{
     }
 
     @Override
-    public void deleteById(String id){
+    public void deleteById(String id) {
         List<Student> retStudent = readStudentsFromFile();
 
         Iterator<Student> iterator = retStudent.iterator();
@@ -127,112 +134,133 @@ public class StudentFileService implements StudentRepository{
     }
 
     @Override
-    public void update(Student student){
+    public void update(Student student) {
         List<Student> retStudent = readStudentsFromFile();
-        int count=0;
+        int count = 0;
 
-        boolean found=false;
-        for(Student x: retStudent){
-            if(x.getId().equals(student.getId())){
-                found=true;
+        boolean found = false;
+        for (Student x : retStudent) {
+            if (x.getId().equals(student.getId())) {
+                found = true;
                 break;
             }
-            count+=1;
+            count += 1;
         }
-        if(!found){
+        if (!found) {
+            logger.error("Student not found!");
             throw new StudentNotFoundException("Student not found during update");
         }
 
         retStudent.set(count, student);
-        System.out.println("Changed student: "+student);
+        System.out.println("Changed student: " + student);
 
         this.writeAll(retStudent);
 
-        // try{    
-        //     String json = mapper.writeValueAsString(retStudent);
-        //     try(FileWriter writer = new FileWriter(filePath)){
-        //         System.out.println(json);
-        //         writer.write(json);
-        //     }
-        //     catch(IOException e){ e.printStackTrace();}
+        // try{
+        // String json = mapper.writeValueAsString(retStudent);
+        // try(FileWriter writer = new FileWriter(filePath)){
+        // System.out.println(json);
+        // writer.write(json);
+        // }
+        // catch(IOException e){ e.printStackTrace();}
         // }
         // catch(JsonProcessingException e){
-        //     e.printStackTrace();
+        // e.printStackTrace();
         // }
     }
 
     @Override
-    public List<Student> findAll(){
+    public List<Student> findAll() {
         List<Student> retStudent = readStudentsFromFile();
-        for(Student x: retStudent){
-            System.out.println("x is:"+x);
+        for (Student x : retStudent) {
+            logger.info("x is {}", x);
+            // System.out.println("x is:"+x);
         }
         return retStudent;
+    }
+
+    @Override
+    public List<Student> findPage(int offset, int limit) {
+
+        List<Student> studentList = new ArrayList<>();
+        List<Student> retStudent = readStudentsFromFile();
+        int from = offset<studentList.size()-1?offset:studentList.size()-1;
+        int to = (from+limit)>studentList.size()?studentList.size():(from+limit);
+        studentList = retStudent.subList(from, to);
+        return studentList;
+    }
+
+    @Override
+    public long count() {
+        long count = 0;
+        List<Student> retStudent = readStudentsFromFile();
+        count = retStudent.size();
+        return count;
     }
 }
 
 // public class StudentFileService implements StudentRepository{
 
-//     private static final String filePath = "studentData.json";
-//     private static final ObjectMapper mapper = new ObjectMapper();
+// private static final String filePath = "studentData.json";
+// private static final ObjectMapper mapper = new ObjectMapper();
 
-//     @Override
-//     public boolean saveData(List<Student> studentList){
-//         boolean result = true;
+// @Override
+// public boolean saveData(List<Student> studentList){
+// boolean result = true;
 
-//         try{
-//             String json = mapper.writeValueAsString(studentList);
-//             try(FileWriter writer = new FileWriter(filePath)){
-//                 System.out.println(json);
-//                 writer.write(json);
-//             }
-//             catch(IOException e){ e.printStackTrace(); result = false;}
-//         }
-//         catch(JsonProcessingException e){
-//             e.printStackTrace();
-//         }
-//         return result;
-//     }
+// try{
+// String json = mapper.writeValueAsString(studentList);
+// try(FileWriter writer = new FileWriter(filePath)){
+// System.out.println(json);
+// writer.write(json);
+// }
+// catch(IOException e){ e.printStackTrace(); result = false;}
+// }
+// catch(JsonProcessingException e){
+// e.printStackTrace();
+// }
+// return result;
+// }
 
-//     @Override
-//     public List<Student> loadData(){
+// @Override
+// public List<Student> loadData(){
 
-//         FileReader reader = null;
-//         StringBuilder strBuild = new StringBuilder();
-//         String json = "";
+// FileReader reader = null;
+// StringBuilder strBuild = new StringBuilder();
+// String json = "";
 
-//         try{
-//             reader = new FileReader(filePath);
-//             int ch = reader.read();
-//             while(ch != -1){
-//                 strBuild.append((char)ch);
-//                 ch = reader.read();
-//             }
-//             json = strBuild.toString();
-//             if(json.isBlank()){
-//                 return new ArrayList<>();
-//             }
-//         }
-//         catch(Exception e){
-//             e.printStackTrace();
-//         }
-//         finally{
-//             if(reader != null){
-//                 try{
-//                     reader.close();
-//                 }
-//                 catch(IOException e){
-                    
-//                 }
-//             }
-//         }
-        
-//         List<Student> retStudent = new ArrayList<>();
-//         try{
-//             retStudent = mapper.readValue(json,new TypeReference<List<Student>>() {});
-//         }
-//         catch(JsonProcessingException e){e.printStackTrace();}
-//         // catch(IOException e){e.printStackTrace();}
-//         return retStudent;
-//     }
+// try{
+// reader = new FileReader(filePath);
+// int ch = reader.read();
+// while(ch != -1){
+// strBuild.append((char)ch);
+// ch = reader.read();
+// }
+// json = strBuild.toString();
+// if(json.isBlank()){
+// return new ArrayList<>();
+// }
+// }
+// catch(Exception e){
+// e.printStackTrace();
+// }
+// finally{
+// if(reader != null){
+// try{
+// reader.close();
+// }
+// catch(IOException e){
+
+// }
+// }
+// }
+
+// List<Student> retStudent = new ArrayList<>();
+// try{
+// retStudent = mapper.readValue(json,new TypeReference<List<Student>>() {});
+// }
+// catch(JsonProcessingException e){e.printStackTrace();}
+// // catch(IOException e){e.printStackTrace();}
+// return retStudent;
+// }
 // }

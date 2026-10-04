@@ -52,6 +52,36 @@ public class InMemoryStudentRepository implements StudentRepository {
         return students;
     }
 
+    public List<Student> findPage(int offset, int limit){
+        List<Student> studentList = new ArrayList<>();
+
+        String sql = "SELECT * FROM students limit ? OFFSET ?";
+
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setLong(1, limit);
+            ps.setLong(2, offset);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                studentList.add(mapRowToStudent(rs));
+            }
+            return studentList;
+
+        } catch (SQLException e) {
+            logger.warn("Student not found");
+            throw new RepositoryException(
+                    "Could not find student", sql);
+        }
+
+    }
+
+    @Override 
+    public long count(){
+
+    }
+
     // ==================
     // private List<Student> students = new ArrayList<>();
 

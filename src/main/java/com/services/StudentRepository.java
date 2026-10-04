@@ -1,9 +1,12 @@
 package com.services;
 
 import java.util.*;
+
+import org.springframework.stereotype.Repository;
+
 import com.objects.Student;
 
-// @Repository
+@Repository 
 public interface StudentRepository {
 
     void save(Student student);
@@ -15,4 +18,9 @@ public interface StudentRepository {
     void update(Student student);
 
     List<Student> findAll();
+
+    List<Student> findPage(int offset, int limit);
+
+    long count();
+
 }

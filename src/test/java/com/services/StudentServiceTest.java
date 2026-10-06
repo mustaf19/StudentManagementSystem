@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import static org.mockito.Mockito.*;
 import com.exceptions.ValidationException;
 import com.exceptions.StudentNotFoundException;
-import com.dto.UpdateStudentRequest;
 import com.exceptions.RepositoryException;
 
 class StudentServiceTest {

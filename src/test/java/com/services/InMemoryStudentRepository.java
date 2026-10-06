@@ -53,33 +53,14 @@ public class InMemoryStudentRepository implements StudentRepository {
     }
 
     public List<Student> findPage(int offset, int limit){
-        List<Student> studentList = new ArrayList<>();
-
-        String sql = "SELECT * FROM students limit ? OFFSET ?";
-
-        try (Connection connection = dataSource.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)) {
-
-            ps.setLong(1, limit);
-            ps.setLong(2, offset);
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                studentList.add(mapRowToStudent(rs));
-            }
-            return studentList;
-
-        } catch (SQLException e) {
-            logger.warn("Student not found");
-            throw new RepositoryException(
-                    "Could not find student", sql);
-        }
-
+        int from = Math.min(offset, this.students.size());
+        int to = Math.min(limit+offset, this.students.size());
+        return this.students.subList(from, to);
     }
 
     @Override 
     public long count(){
-
+        return this.students.size();
     }
 
     // ==================

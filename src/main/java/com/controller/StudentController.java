@@ -4,6 +4,7 @@ import java.util.List;
 import com.services.StudentService;
 import com.dto.CreateStudentRequest;
 import com.dto.StudentMapper;
+import com.dto.StudentPage;
 import com.dto.StudentResponse;
 import com.dto.UpdateStudentRequest;
 import com.objects.Student;
@@ -21,14 +22,19 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping
-    public List<Student> getStudents(){
-        return studentService.getStudentsList();
-    }
+    // @GetMapping
+    // public List<Student> getStudents(){
+    //     return studentService.getStudentsList();
+    // }
 
     @GetMapping("/{id}")
     public StudentResponse getStudent(@PathVariable String id){
         return StudentMapper.toResponse(studentService.searchStudentById(id));
+    }
+
+    @GetMapping
+    public StudentPage getStudents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        return studentService.getStudents(page, size);
     }
 
     @PostMapping

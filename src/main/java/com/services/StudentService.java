@@ -11,6 +11,8 @@ import java.time.LocalDate;
 
 import com.exceptions.ValidationException;
 import com.exceptions.StudentNotFoundException;
+import com.dto.StudentMapper;
+import com.dto.StudentPage;
 import com.exceptions.RepositoryException;
 
 // import org.springframework.web.bind.annotation.*;
@@ -60,6 +62,23 @@ public class StudentService{
 
     public List<Student> getStudentsList(){
         return Collections.unmodifiableList(this.sri.findAll());
+    }
+
+    public StudentPage getStudents(int page, int size){
+        if(!(page>=0)){
+            throw new ValidationException("Not a valid page!");
+        }
+        else if((size<0) || (size>100)){
+            throw new ValidationException("Not a valid size!");
+        }
+
+        int offset = ((page-1)*size)+1;
+        int limit = size;
+
+        List<Student> content = this.sri.findPage(offset, limit);
+        long total = this.sri.count();
+        return StudentMapper.toStudentPage(content, page, size, total);  
+        
     }
 
     public Student searchStudentById(String id){

@@ -42,7 +42,6 @@ public class StudentFileService implements StudentRepository {
             }
         } catch (Exception e) {
             logger.error("Not able to read file.");
-            e.printStackTrace();
         } finally {
             if (reader != null) {
                 try {
@@ -59,7 +58,6 @@ public class StudentFileService implements StudentRepository {
             });
         } catch (JsonProcessingException e) {
             logger.error("Unable to read Json.");
-            e.printStackTrace();
         }
         // catch(IOException e){e.printStackTrace();}
         return retStudent;
@@ -70,14 +68,13 @@ public class StudentFileService implements StudentRepository {
         try {
             String json = mapper.writeValueAsString(studentList);
             try (FileWriter writer = new FileWriter(filePath)) {
-                System.out.println(json);
+                logger.info(json);
                 writer.write(json);
             } catch (IOException e) {
                 logger.error("Unable to write in file");
-                e.printStackTrace();
             }
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -152,7 +149,7 @@ public class StudentFileService implements StudentRepository {
         }
 
         retStudent.set(count, student);
-        System.out.println("Changed student: " + student);
+        logger.info("Changed student: " + student);
 
         this.writeAll(retStudent);
 

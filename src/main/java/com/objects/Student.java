@@ -5,9 +5,17 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class Student{
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Student record (used in paged list content)")
+public class Student {
+    @Schema(example = "STU-1001")
     private String id;
+
+    @Schema(example = "Jane Doe")
     private String name;
+
+    @Schema(example = "jane.doe@example.com")
     private String email;
     private String address;
     private String phoneNo;

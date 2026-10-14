@@ -1,6 +1,8 @@
 package com.services;
 
 import java.util.List;
+import java.util.UUID;
+
 import com.objects.Student;
 
 import jakarta.transaction.Transactional;
@@ -45,7 +47,8 @@ public class StudentService{
     }
 
     @Transactional 
-    public void addStudent(Student student){
+    public Student addStudent(Student student){
+        student.setId(UUID.randomUUID().toString());
         this.checkEmail(student.getEmail());
         this.checkPhone(student.getPhoneNo());
         if(this.sri.findById(student.getId()).isPresent())
@@ -58,6 +61,7 @@ public class StudentService{
                 throw new RepositoryException("Could not save student", e);
             }
         }
+        return student;
     }
 
     public List<Student> getStudentsList(){

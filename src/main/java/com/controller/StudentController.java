@@ -6,6 +6,7 @@ import com.dto.StudentMapper;
 import com.dto.StudentPage;
 import com.dto.StudentResponse;
 import com.dto.UpdateStudentRequest;
+import com.objects.Student;
 
 import jakarta.validation.Valid;
 
@@ -13,6 +14,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -48,8 +51,10 @@ public class StudentController {
 
     @Operation(summary = "Create a new student")
     @PostMapping
-    public void addStudent(@Valid @RequestBody CreateStudentRequest req) {
-        studentService.addStudent(StudentMapper.toStudent(req));
+    public ResponseEntity<StudentResponse> addStudent(@Valid @RequestBody CreateStudentRequest req) {
+        Student created = studentService.addStudent(StudentMapper.toStudent(req));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(StudentMapper.toResponse(created));
     }
 
     // @PutMapping("/{id}")

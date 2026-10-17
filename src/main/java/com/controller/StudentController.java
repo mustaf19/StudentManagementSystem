@@ -76,4 +76,5 @@ public class StudentController {
             @Parameter(description = "Student ID") @PathVariable String id) {
         studentService.deleteStudent(id);
     }
+
 }

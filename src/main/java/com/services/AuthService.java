@@ -1,6 +1,7 @@
 package com.services;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,15 +23,16 @@ public class AuthService {
     }
 
     public AuthResponse login(AuthRequest request) {
+        Authentication authentication;
         try {
-            authenticationManager.authenticate(
+            authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         } catch (BadCredentialsException ex) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
         }
 
         AuthResponse response = new AuthResponse();
-        response.setToken(jwtService.generateToken(request.getUsername()));
+        response.setToken(jwtService.generateToken(authentication));
         response.setExpiresInSeconds(jwtService.expiryInSeconds());
         return response;
     }

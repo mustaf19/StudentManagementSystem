@@ -7,8 +7,10 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -23,11 +25,11 @@ public class JwtService {
         this.expiry = expString;
     }
 
-    public String generateToken(String username) {
+    public String generateToken(Authentication authentication) {
         Instant now = Instant.now();
-        long expiry =this.expiry;
         return Jwts.builder()
-                .subject(username)
+                .subject(authentication.getName())
+                .claim("role", "ROLE_ADMIN")
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusMillis(expiry)))
                 .signWith(key)
@@ -36,5 +38,9 @@ public class JwtService {
 
     public long expiryInSeconds(){
         return (expiry/1000);
+    }
+
+    public Claims parse(String token){
+        return Jwts.parser().verifyWith(this.key).build().parseSignedClaims(token).getPayload();
     }
 }

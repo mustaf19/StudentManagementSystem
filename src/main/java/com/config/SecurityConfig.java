@@ -21,25 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/students", "/students/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/students", "/students/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/students", "/students/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/students", "/students/**").authenticated()
-                        .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults());
-
-        return http.build();
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
@@ -59,25 +40,25 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(admin);
     }
 
-    @Bean 
+    @Bean
     public SecurityFilterChain securityFilterChain(
-        HttpSecurity http, 
-        JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception{
-            http
-                    .csrf(csrf -> csrf.disable())
-                    .sessionManagement(session ->
-                            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .authorizeHttpRequests(auth -> auth
-                            .requestMatchers(HttpMethod.GET, "/students", "/students/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                            .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/students", "/students/**").authenticated()
-                            .requestMatchers(HttpMethod.PUT, "/students", "/students/**").authenticated()
-                            .requestMatchers(HttpMethod.DELETE, "/students", "/students/**").authenticated()
-                            .anyRequest().authenticated())
-                            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                    .httpBasic(Customizer.withDefaults());
-    
-            return http.build();
-        }
+            HttpSecurity http,
+            JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/students", "/students/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/students", "/students/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/students", "/students/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/students", "/students/**").authenticated()
+                        .anyRequest().authenticated())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .httpBasic(Customizer.withDefaults());
+
+        return http.build();
+    }
 }

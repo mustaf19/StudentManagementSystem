@@ -55,9 +55,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/students", "/students/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/students", "/students/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/students", "/students/**").authenticated()
-                        .anyRequest().authenticated())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(Customizer.withDefaults());
+                        .anyRequest().authenticated()) 
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                // .httpBasic(Customizer.withDefaults()); // removes basic auth
 
         return http.build();
     }

@@ -1,7 +1,7 @@
 package com.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -14,20 +14,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import com.config.SecurityConfig;
 import com.exceptions.StudentNotFoundException;
+import com.jayway.jsonpath.JsonPath;
 import com.objects.Student;
+import com.services.AuthService;
+import com.services.JwtService;
 import com.services.StudentService;
 
-@WebMvcTest(StudentController.class)
-@Import(SecurityConfig.class)
+@WebMvcTest({StudentController.class, AuthController.class})
+@Import({SecurityConfig.class, JwtService.class, AuthService.class})
 public class StudentControllerTest {
 
         @Autowired
         private MockMvc mockMvc;
+
+        @Autowired
+        private JwtService jwtService;
 
         @MockitoBean
         private StudentService studentService;
@@ -53,7 +61,7 @@ public class StudentControllerTest {
 
         @Test
         void getUnknownStudentIdReturns404() throws Exception {
-              
+
                 when(studentService.searchStudentById("099"))
                                 .thenThrow(new StudentNotFoundException("Student_NOT_FOUND"));
 
@@ -63,10 +71,10 @@ public class StudentControllerTest {
         }
 
         @Test
+        @WithMockUser
         void postInvalidBodyReturns400() throws Exception {
 
                 mockMvc.perform(post("/students")
-                                .with(httpBasic("admin", "password"))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"\",\"email\":\"not-an-email\"}"))
                                 .andExpect(status().isBadRequest())
@@ -79,6 +87,24 @@ public class StudentControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"Ada\",\"email\":\"ada@example.com\"}"))
                                 .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void loginReturnsTokenForAdminAnd401ForWrongPassword() throws Exception {
+                mockMvc.perform(post("/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"username\":\"admin\",\"password\":\"wrong\"}"))
+                                .andExpect(status().isUnauthorized());
+
+                MvcResult result = mockMvc.perform(post("/auth/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"username\":\"admin\",\"password\":\"password\"}"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.token").isNotEmpty())
+                                .andReturn();
+
+                String token = JsonPath.read(result.getResponse().getContentAsString(), "$.token");
+                assertEquals("admin", jwtService.parse(token).getSubject());
         }
 
 }
